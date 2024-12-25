@@ -4,7 +4,7 @@
 Layers Pane Plus is an advanced script for Adobe After Effects that provides extended functionality for layer creation and management. Designed to enhance workflow, this script offers an intuitive user interface with icon buttons for various layer operations.
 
 ## Current Version
-**v2.0** - Major update with new features and enhanced functionality.
+**v1.7** - Latest update with enhanced layer splitting functionality and a new precompose feature.
 
 ## Installation
 1. Locate the After Effects ScriptUI Panels folder:
@@ -15,63 +15,43 @@ Layers Pane Plus is an advanced script for Adobe After Effects that provides ext
 3. Ensure that the `LpPlusAssets` folder (containing the icons) is in the same location as the script.
 
 ## Main Features
-- Quick creation of various layer types: Text, Solid, Null Object, Shape, Camera, Light, Adjustment
-- Deletion of selected layers with confirmation option
+- Quick creation of various layer types: Text, Solid, Null Object, Shape, Camera, Adjustment
+- Deletion of selected layers
 - Creation of layer sequences based on selection order
 - Splitting of layers at the current time indicator
 - Precompose selected layers using the native After Effects dialog
 - Creation of new compositions using the native After Effects dialog
-- Auto Parent Layers (Only for Text, Shape and Null layers)
-- Match Layer Duration (Only for Text, Shape and Null layers)
-- Settings panel for customizing script behavior
 - User-friendly interface with icon buttons
 - Dockable panel in the workspace
 - Resizable window with adaptive button alignment
-
-## Settings Options
-- Auto Parent Layers: Automatically parent selected layers to new layers
-- Match Layer Duration: New layers match the duration of selected layers
-- Auto Delete Split Parts: Option to automatically delete split parts
-- Show Delete Confirmation: Toggle confirmation dialog for layer deletion
-
-Note about limitations:
-The Auto Parent Layers and Match Layer Duration options only work with Text, Shape, and Null layers. These features are not available for Solid, Light, Camera, and Adjustment layer types due to limitations in After Effects' native implementation for these layer types.
 
 ## Usage
 1. Open Adobe After Effects
 2. Go to Window > Layers Pane Plus
 3. Use the buttons to create different types of layers or perform actions
-4. Access the Settings panel to customize script behavior
-5. For layer sequencing:
+4. For layer sequencing:
    - Select layers in the desired order
    - Click the sequence button
-   - The first selected layer will maintain its position, and subsequent layers will be placed one after another
-6. For creating layers with parenting or duration matching:
-   - Enable desired options in Settings panel
-   - Select target layer(s)
-   - Create new Text, Shape, or Null layer
-7. For splitting layers:
-   - Position the time indicator
-   - Select specific layers or leave unselected for all layers
-   - Click the split button
-8. For precomposing:
-   - Select layers to precompose
-   - Click the precompose button
-   - Use the native After Effects dialog
+   - The first selected layer will maintain its position, and subsequent layers will be placed one after another in the order of selection, respecting their trimmed durations
+5. For creating Solid, Text, Null Object, Shape, Camera, and Adjustment layers:
+   - Click the respective button
+   - Use the native After Effects dialog (if applicable)
+   - Choose your settings in the dialog
+   - The script will ensure the name is unique in the composition
+6. To split layers at the current time indicator:
+   - Click the "Split Layers at Current Time" button
+   - **Note:** 
+     - If a layer is selected, only that layer will be split at the current time.
+     - If no layer is selected, all applicable layers will be split at the current time.
+7. To precompose layers:
+   - Select one or more layers in the active composition
+   - Click the "Precompose Selected Layers" button
+   - The native After Effects Precompose dialog will appear
+   - Configure your precomposition settings and confirm
 
 ## Version History
 
-### v2.0 (Current Version)
-- Added Settings panel for script customization
-- Implemented Auto Parent Layers feature
-- Added Match Layer Duration functionality
-- Added Light Layer creation
-- Added Auto Delete Split Parts option
-- Added Delete Confirmation dialog option
-- Improved UI responsiveness and layout
-- Enhanced documentation and help system
-
-### v1.7
+### v1.7 (Current Version)
 - Renamed the layer splitting function for better clarity
 - Enhanced the layer splitting function to handle specific or all layers based on selection
 - Added a new button for quickly precomposing selected layers
@@ -106,7 +86,7 @@ The Auto Parent Layers and Match Layer Duration options only work with Text, Sha
 - Implemented unique naming system for layers
 
 ### v1.5
-- Rewritten layer sequencing function
+- Rewrote layer sequencing function
 
 ### v1.4
 - Updated sequencing function to respect layer in and out points
