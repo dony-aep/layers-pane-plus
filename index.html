@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <!-- Compatible with Adobe After Effects CC (2014) (version 13.0) and above -->
+    <title>Layers Pane Plus</title>
+    <!-- Import Poppins from Google Fonts -->
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet"> -->
+    <!-- Import Material Symbols Outlined -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@200" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <!-- CSInterface.js must be included; it's provided by Adobe -->
+    <script type="text/javascript" src="js/CSInterface.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+</head>
+<body>
+    <div id="app" class="container">
+        <!-- Tab bar -->
+        <div class="tab-bar">
+            <button class="tab active" data-section="layer-creation" title="Create and manage layers">
+                <span class="material-symbols-outlined">layers</span>
+                <span>Layers</span>
+            </button>
+            <button class="tab" data-section="editing" title="Edit and modify layers">
+                <span class="material-symbols-outlined">edit</span>
+                <span>Edit</span>
+            </button>
+            <button class="tab" data-section="settings" title="Configure extension options">
+                <span class="material-symbols-outlined">settings</span>
+                <span>Options</span>
+            </button>
+        </div>
+        
+        <!-- Section: Layer Creation -->
+        <div id="section-layer-creation" class="section active">
+            <div class="group">
+                <div class="button-container">
+                    <button id="createTextBtn" class="icon-btn" title="Create Text Layer">
+                        <img class="button-icon" src="images/path_to_text_icon.png" alt="Text Icon">
+                        <span>Text</span>
+                    </button>
+                    <button class="toggle-options" data-target="textOptions" title="Toggle text options">
+                        <span class="material-symbols-outlined">expand_more</span>
+                    </button>
+                    <div id="textOptions" class="options-container hidden">
+                        <div class="input-container">
+                            <input type="text" id="textLayerInput" placeholder="Enter custom text..." title="Text for new layer">
+                            <button class="clear-input" title="Clear text">
+                                <span class="material-symbols-outlined">close</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <button id="createSolidBtn" class="icon-btn" title="Create Solid Layer">
+                    <img class="button-icon" src="images/path_to_solid_icon.png" alt="Solid Icon">
+                    <span>Solid</span>
+                </button>
+                <button id="createLightBtn" class="icon-btn" title="Create Light">
+                    <img class="button-icon" src="images/path_to_light_icon.png" alt="Light Icon">
+                    <span>Light</span>
+                </button>
+                <button id="createCameraBtn" class="icon-btn" title="Create Camera">
+                    <img class="button-icon" src="images/path_to_camera_icon.png" alt="Camera Icon">
+                    <span>Camera</span>
+                </button>
+                <button id="createNullBtn" class="icon-btn" title="Create Null Object">
+                    <img class="button-icon" src="images/path_to_null_icon.png" alt="Null Icon">
+                    <span>Null</span>
+                </button>
+                <button id="createShapeBtn" class="icon-btn" title="Create Shape Layer">
+                    <img class="button-icon" src="images/path_to_shape_icon.png" alt="Shape Icon">
+                    <span>Shape</span>
+                </button>
+                <button id="createAdjustmentBtn" class="icon-btn" title="Create Adjustment Layer">
+                    <img class="button-icon" src="images/path_to_adjustment_icon.png" alt="Adjustment Icon">
+                    <span>Adjustment</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Section: Editing -->
+        <div id="section-editing" class="section">
+            <div class="group">
+                <div class="button-container">
+                    <button id="deleteLayerBtn" class="icon-btn" title="Delete Selected Layers">
+                        <img class="button-icon" src="images/path_to_delete_icon.png" alt="Delete Icon">
+                        <span>Delete</span>
+                    </button>
+                    <button class="toggle-options" data-target="deleteOptions" title="Toggle delete options">
+                        <span class="material-symbols-outlined">expand_more</span>
+                    </button>
+                    <div id="deleteOptions" class="options-container hidden">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="deleteConfirmCheckbox" checked title="Show confirmation dialog before deleting layers">
+                            <label for="deleteConfirmCheckbox" title="Show confirmation dialog before deleting layers">Show confirmation</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="button-container">
+                    <button id="createSequenceBtn" class="icon-btn" title="Create Layer Sequence">
+                        <img class="button-icon" src="images/path_to_sequence_icon.png" alt="Sequence Icon">
+                        <span>Sequence</span>
+                    </button>
+                    <button class="toggle-options" data-target="sequenceOptions" title="Toggle sequence options">
+                        <span class="material-symbols-outlined">expand_more</span>
+                    </button>
+                    <div id="sequenceOptions" class="options-container hidden">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="reverseSequenceCheckbox" title="Create sequence in reverse order">
+                            <label for="reverseSequenceCheckbox" title="Create sequence in reverse order">Reverse Order</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="button-container">
+                    <button id="splitLayerBtn" class="icon-btn" title="Split Layer">
+                        <img class="button-icon" src="images/path_to_split_icon.png" alt="Split Icon">
+                        <span>Split</span>
+                    </button>
+                    <button class="toggle-options" data-target="splitOptions" title="Toggle split options">
+                        <span class="material-symbols-outlined">expand_more</span>
+                    </button>
+                    <div id="splitOptions" class="options-container hidden">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="deleteSplitCheckbox" title="Automatically delete split parts">
+                            <label for="deleteSplitCheckbox" title="Automatically delete split parts">Auto delete split</label>
+                        </div>
+                        <div id="trimDirectionContainer" class="radio-container hidden">
+                            <span class="radio-label">Trim direction:</span>
+                            <div class="radio-group">
+                                <input type="radio" id="trimLeftRadio" name="trimDirection" value="left" checked>
+                                <label for="trimLeftRadio">Left</label>
+                                <input type="radio" id="trimRightRadio" name="trimDirection" value="right">
+                                <label for="trimRightRadio">Right</label>
+                            </div>
+                        </div>
+                        <div id="additionalFramesContainer" class="number-container hidden">
+                            <span class="number-label">Additional frames:</span>
+                            <div class="number-input-container">
+                                <button id="decrementFramesBtn" class="frame-control-btn" title="Decrease frames">
+                                    <span class="material-symbols-outlined">remove</span>
+                                </button>
+                                <input type="number" id="additionalFramesInput" min="0" max="100" value="0" title="Number of additional frames to keep">
+                                <button id="incrementFramesBtn" class="frame-control-btn" title="Increase frames">
+                                    <span class="material-symbols-outlined">add</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button id="precomposeBtn" class="icon-btn" title="Precompose Layers">
+                    <img class="button-icon" src="images/path_to_precompose_icon.png" alt="Precompose Icon">
+                    <span>Precompose</span>
+                </button>
+                
+                <button id="createCompBtn" class="icon-btn" title="Create New Composition">
+                    <img class="button-icon" src="images/path_to_create_comp_icon.png" alt="New Comp Icon">
+                    <span>New Comp</span>
+                </button>
+                <button id="compSettingsBtn" class="icon-btn" title="Composition Settings">
+                    <img class="button-icon" src="images/path_to_create_comp_icon.png" alt="Comp Settings Icon">
+                    <span>Comp Settings</span>
+                </button>
+                <button id="layerSettingsBtn" class="icon-btn" title="Layer Settings">
+                    <img class="button-icon" src="images/path_to_layer_settings_icon.png" alt="Layer Settings Icon">
+                    <span>Layer Settings</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Section: Settings & Help -->
+        <div id="section-settings" class="section">
+            <div class="group">
+                <button id="helpBtn" class="icon-btn" title="Help">
+                    <img class="button-icon" src="images/path_to_help_icon.png" alt="Help Icon">
+                    <span>Help</span>
+                </button>
+                <button id="openSettingsBtn" class="icon-btn" title="Open Settings Panel">
+                    <img class="button-icon" src="images/path_to_settings_icon.png" alt="Settings Icon">
+                    <span>Settings</span>
+                </button>
+            </div>
+            <div class="footer">
+                <p>
+                    Made by 
+                    <a class="footer-link" title="Visit donyaep.vercel.app" href="https://donyaep.vercel.app/" target="_blank" rel="noopener noreferrer">
+                        dony.
+                    </a>
+                </p>
+            </div>
+        </div>
+        
+        <!-- Settings Modal -->
+        <div id="settingsModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Layers Pane Plus Settings</h2>
+                    <button class="close-modal" title="Close settings">
+                        <span class="material-symbols-outlined" title="Close">close</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="settings-section">
+                        <h3>Layer Creation Options</h3>
+                        <div class="checkbox-container modal-checkbox">
+                            <input type="checkbox" id="autoParentLayersCheckbox" title="Automatically parent selected layers to new layers">
+                            <label for="autoParentLayersCheckbox" title="Automatically parent selected layers to new layers">Auto Parent Layers</label>
+                        </div>
+                        <div class="checkbox-container modal-checkbox">
+                            <input type="checkbox" id="matchDurationCheckbox" title="Match duration of new layers to selected layers">
+                            <label for="matchDurationCheckbox" title="Match duration of new layers to selected layers">Match Layer Duration</label>
+                        </div>
+                        <p class="settings-note">Note: Layer Creation Options work with all layer types (Text, Shape, Null, Adjustment, Solid, Light, and Camera layers).</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="version-info">Version: 3.1.0</div>
+                    <div class="modal-buttons">
+                        <button id="saveSettingsBtn" class="modal-btn save-btn" title="Save settings and close">Save</button>
+                        <button id="cancelSettingsBtn" class="modal-btn cancel-btn" title="Close without saving changes">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Help Modal -->
+        <div id="helpModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Help and Documentation</h2>
+                    <button class="close-modal" title="Close help">
+                        <span class="material-symbols-outlined" title="Close">close</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="help-section">
+                        <div class="help-content-panel">
+                            <h3>Features</h3>
+                            <div class="help-content-text">
+                                <p><strong>Layer Creation Tools:</strong></p>
+                                <ul>
+                                    <li>Text Layer - Creates a new text layer</li>
+                                    <li>Solid Layer - Creates a new solid layer</li>
+                                    <li>Light - Creates a new light</li>
+                                    <li>Camera - Creates a new camera</li>
+                                    <li>Null Object - Creates a new null object</li>
+                                    <li>Shape Layer - Creates a new shape layer</li>
+                                    <li>Adjustment Layer - Creates a new adjustment layer</li>
+                                </ul>
+                                <p><strong>Editing Tools:</strong></p>
+                                <ul>
+                                    <li>Delete - Removes selected layers</li>
+                                    <li>Sequence - Creates a sequence from selected layers</li>
+                                    <li>Split - Splits layers at current time</li>
+                                    <li>Precompose - Precomposes selected layers</li>
+                                    <li>New Composition - Creates a new composition</li>
+                                </ul>
+                                <p><strong>Settings & Options:</strong></p>
+                                <ul>
+                                    <li>Auto Parent Layers - Automatically parents selected layers</li>
+                                    <li>Match Layer Duration - Matches duration of new layers</li>
+                                    <li>Auto Delete Split Parts - Automatically deletes split parts</li>
+                                    <li>Show Delete Confirmation - Shows confirmation before deleting</li>
+                                </ul>
+                                <p class="help-note">Note: Auto Parent and Match Duration options now work with all layer types.</p>
+                            </div>
+                        </div>
+                        <div class="help-contact-panel">
+                            <p>For support and updates, visit:</p>
+                            <div class="help-link-group">
+                                <div class="input-with-feedback">
+                                    <input type="text" id="helpLinkText" value="donyaep.vercel.app/" readonly>
+                                    <span class="copy-feedback">
+                                        <span class="material-symbols-outlined">check</span>
+                                    </span>
+                                </div>
+                                <button id="helpCopyBtn" class="modal-btn" title="Copy link to clipboard">Copy</button>
+                                <button id="helpOpenBtn" class="modal-btn" title="Open link in browser">Open</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="version-info">Layers Pane Plus v3.1.0</div>
+                    <div class="modal-buttons">
+                        <button id="closeHelpBtn" class="modal-btn save-btn" title="Close help">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
