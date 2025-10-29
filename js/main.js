@@ -67,6 +67,13 @@
         document.getElementById("deleteLayerBtn").addEventListener("click", function () {
             csInterface.evalScript('deleteLayer()');
         });
+        document.getElementById("duplicateLayerBtn").addEventListener("click", function () {
+            var includeEffects = document.getElementById("duplicateWithEffectsCheckbox").checked;
+            var includeExpressions = document.getElementById("duplicateWithExpressionsCheckbox").checked;
+            var numberOfCopies = parseInt(document.getElementById("duplicateCopiesInput").value) || 1;
+            
+            csInterface.evalScript('duplicateLayer(' + includeEffects + ', ' + includeExpressions + ', ' + numberOfCopies + ')');
+        });
         document.getElementById("createSequenceBtn").addEventListener("click", function () {
             csInterface.evalScript('createLayerSequence()');
         });
@@ -75,6 +82,14 @@
         });
         document.getElementById("precomposeBtn").addEventListener("click", function () {
             csInterface.evalScript('precomposeSelectedLayers()');
+        });
+        document.getElementById("addMarkerBtn").addEventListener("click", function () {
+            var target = document.getElementById("markerLayerRadio").checked ? "layer" : "comp";
+            csInterface.evalScript('addMarker("' + target + '")');
+        });
+        document.getElementById("removeMarkersBtn").addEventListener("click", function () {
+            var target = document.getElementById("markerLayerRadio").checked ? "layer" : "comp";
+            csInterface.evalScript('removeAllMarkers("' + target + '")');
         });
         document.getElementById("createCompBtn").addEventListener("click", function () {
             csInterface.evalScript('createNewCompositionNative()');
@@ -86,29 +101,85 @@
             csInterface.evalScript('openLayerSettings()');
         });
 
-        // Help and Settings Modals
-        document.getElementById("helpBtn").addEventListener("click", function () {
-            document.getElementById("helpModal").classList.add("visible");
+        // Settings Modal
+        document.getElementById("floatingSettingsBtn").addEventListener("click", function () {
+            openUnifiedModal("settings");
         });
-        document.getElementById("openSettingsBtn").addEventListener("click", function () {
-            document.getElementById("settingsModal").classList.add("visible");
+        
+        function openUnifiedModal(section) {
+            var modal = document.getElementById("unifiedModal");
+            modal.classList.add("visible");
             
-            // Load current settings
-            csInterface.evalScript('app.settings.haveSetting("LayersPanePlus", "autoParentLayers") ? app.settings.getSetting("LayersPanePlus", "autoParentLayers") === "true" : false', function(result) {
-                document.getElementById("autoParentLayersCheckbox").checked = (result === "true");
+            // Switch to the requested section
+            var tabs = document.querySelectorAll('.modal-tab');
+            var sections = document.querySelectorAll('.modal-section');
+            
+            tabs.forEach(function(tab) {
+                tab.classList.remove('active');
+                if (tab.getAttribute('data-modal-section') === section) {
+                    tab.classList.add('active');
+                }
             });
             
-            csInterface.evalScript('app.settings.haveSetting("LayersPanePlus", "matchNewLayerDuration") ? app.settings.getSetting("LayersPanePlus", "matchNewLayerDuration") === "true" : false', function(result) {
-                document.getElementById("matchDurationCheckbox").checked = (result === "true");
+            sections.forEach(function(sec) {
+                sec.classList.remove('active');
+                if (sec.id === 'modal-section-' + section) {
+                    sec.classList.add('active');
+                }
+            });
+            
+            // Load settings if opening settings section
+            if (section === "settings") {
+                csInterface.evalScript('app.settings.haveSetting("LayersPanePlus", "autoParentLayers") ? app.settings.getSetting("LayersPanePlus", "autoParentLayers") === "true" : false', function(result) {
+                    document.getElementById("autoParentLayersCheckbox").checked = (result === "true");
+                });
+                
+                csInterface.evalScript('app.settings.haveSetting("LayersPanePlus", "matchNewLayerDuration") ? app.settings.getSetting("LayersPanePlus", "matchNewLayerDuration") === "true" : false', function(result) {
+                    document.getElementById("matchDurationCheckbox").checked = (result === "true");
+                });
+            }
+        }
+        
+        // Modal Tabs
+        var modalTabs = document.querySelectorAll('.modal-tab');
+        modalTabs.forEach(function(tab) {
+            tab.addEventListener('click', function() {
+                var targetSection = this.getAttribute('data-modal-section');
+                
+                modalTabs.forEach(function(t) {
+                    t.classList.remove('active');
+                });
+                
+                var modalSections = document.querySelectorAll('.modal-section');
+                modalSections.forEach(function(section) {
+                    section.classList.remove('active');
+                });
+                
+                this.classList.add('active');
+                var section = document.getElementById('modal-section-' + targetSection);
+                if (section) {
+                    section.classList.add('active');
+                }
+                
+                // Load settings if switching to settings
+                if (targetSection === "settings") {
+                    csInterface.evalScript('app.settings.haveSetting("LayersPanePlus", "autoParentLayers") ? app.settings.getSetting("LayersPanePlus", "autoParentLayers") === "true" : false', function(result) {
+                        document.getElementById("autoParentLayersCheckbox").checked = (result === "true");
+                    });
+                    
+                    csInterface.evalScript('app.settings.haveSetting("LayersPanePlus", "matchNewLayerDuration") ? app.settings.getSetting("LayersPanePlus", "matchNewLayerDuration") === "true" : false', function(result) {
+                        document.getElementById("matchDurationCheckbox").checked = (result === "true");
+                    });
+                }
             });
         });
         
         // Modal Event Handlers
         document.querySelector(".close-modal").addEventListener("click", function() {
-            document.getElementById("settingsModal").classList.remove("visible");
+            document.getElementById("unifiedModal").classList.remove("visible");
         });
         
-        document.getElementById("settingsModal").addEventListener("click", function(e) {
+        document.getElementById("unifiedModal").addEventListener("click", function(e) {
             if (e.target === this) {
                 this.classList.remove("visible");
             }
@@ -121,11 +192,11 @@
             csInterface.evalScript('app.settings.saveSetting("LayersPanePlus", "autoParentLayers", ' + autoParentLayers + ')');
             csInterface.evalScript('app.settings.saveSetting("LayersPanePlus", "matchNewLayerDuration", ' + matchDuration + ')');
             
-            document.getElementById("settingsModal").classList.remove("visible");
+            document.getElementById("unifiedModal").classList.remove("visible");
         });
         
         document.getElementById("cancelSettingsBtn").addEventListener("click", function() {
-            document.getElementById("settingsModal").classList.remove("visible");
+            document.getElementById("unifiedModal").classList.remove("visible");
         });
         
         // Delete Confirmation Settings
@@ -227,10 +298,6 @@
                     this.classList.remove("visible");
                 }
             });
-        });
-        
-        document.getElementById("closeHelpBtn").addEventListener("click", function() {
-            document.getElementById("helpModal").classList.remove("visible");
         });
         
         // Help Modal Buttons
@@ -359,13 +426,45 @@
         reverseSequenceCheckbox.addEventListener("change", function() {
             csInterface.evalScript('app.settings.saveSetting("LayersPanePlus", "reverseSequence", ' + reverseSequenceCheckbox.checked + ')');
         });
+
+        // Duplicate Layer Counter Buttons
+        var decrementCopiesBtn = document.getElementById("decrementCopiesBtn");
+        var incrementCopiesBtn = document.getElementById("incrementCopiesBtn");
+        var duplicateCopiesInput = document.getElementById("duplicateCopiesInput");
+
+        if (decrementCopiesBtn && incrementCopiesBtn && duplicateCopiesInput) {
+            decrementCopiesBtn.addEventListener("click", function() {
+                var currentValue = parseInt(duplicateCopiesInput.value) || 1;
+                if (currentValue > 1) {
+                    duplicateCopiesInput.value = currentValue - 1;
+                }
+            });
+            
+            incrementCopiesBtn.addEventListener("click", function() {
+                var currentValue = parseInt(duplicateCopiesInput.value) || 1;
+                if (currentValue < 100) {
+                    duplicateCopiesInput.value = currentValue + 1;
+                }
+            });
+
+            duplicateCopiesInput.addEventListener("input", function() {
+                if (this.value < 1 || this.value === "" || isNaN(this.value)) {
+                    this.value = 1;
+                }
+            });
+
+            duplicateCopiesInput.addEventListener("change", function() {
+                var value = Math.max(1, Math.min(100, parseInt(this.value) || 1));
+                this.value = value;
+            });
+        }
     }
 
     function initMenu() {
         var menuXML =
             '<Menu>' +
                 '<MenuItem Id="separator1" Label="---" Enabled="false"/>' +
-                '<MenuItem Id="refreshPanel" Label="Refresh Layers Pane Plus v3.1.0" Enabled="true" Checked="false"/>' +
+                '<MenuItem Id="refreshPanel" Label="Refresh Layers Pane Plus v3.2.0" Enabled="true" Checked="false"/>' +
                 '<MenuItem Id="separator2" Label="---" Enabled="false"/>' +
                 '<MenuItem Id="documentationLink" Label="Open Documentation" Enabled="true" Checked="false"/>' +
             '</Menu>';

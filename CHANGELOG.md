@@ -5,6 +5,59 @@ All notable changes to Layers Pane Plus extension will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.2.0] - 2025-10-21
+
+### Added
+- **Duplicate Layer(s)** functionality with advanced options:
+  - Duplicate with/without effects
+  - Duplicate with/without expressions
+  - Create multiple copies (1-100) with a single action
+  - Intelligent ID-based selection system - all duplicated layers remain selected
+  - Works with multiple layer selection
+  - Robust detection algorithm that doesn't depend on layer names or indices
+- **Markers Manager** functionality:
+  - Add markers to selected layers or composition at current time
+  - Remove all markers from selected layers or entire composition
+  - Target selector (Layer/Comp) with radio buttons
+  - Smart validation - alerts when no layers selected or no markers exist
+  - Batch marker operations with count feedback
+- Unified modal system - Settings and Help now accessible through a single modal with internal tabs
+- Floating menu with blur effect in bottom-right corner for quick access to Settings
+- New button styles: `.button-group-horizontal` for action buttons layout and `.action-btn` style for marker management buttons
+
+### Enhanced
+- Complete UI redesign with modern grayscale color palette and improved visual hierarchy
+- Increased border-radius across all elements (buttons, containers, modals) for a more modern look
+- Improved scrollbar design - larger (14px) and more visible for better usability
+- Sticky header and footer in modal - always visible while scrolling content
+- Tab bar now features backdrop blur effect for a modern glass-morphism look
+- All colors centralized in CSS variables for easy theme management
+- Help section redesigned with grid-based layout and categorized features:
+  - Layer Creation tools
+  - Layer Editing tools (including Duplicate and Markers Manager)
+  - Smart Features (Duplicate Options, Batch Duplication, Layer/Comp Markers)
+- Layer Settings validation now includes footage layers (images, videos, audio) with helpful messages
+
+### Changed
+- Removed "Options" tab from main interface - Settings now accessed via floating menu
+- Modal structure with "General" header and organized tab navigation (Settings first, then Help)
+- Hover effects now use only color transitions (removed transform animations)
+- Responsive design adjustments for small screens - floating menu adapts to smaller displays
+
+### Fixed
+- Modal scroll now limited to content area only, footer remains fixed
+- Duplicate layers function now properly creates exact number of copies requested
+- All duplicated layers properly selected after operation regardless of quantity
+
+### UI/UX
+- Complete color system overhaul with refined grayscale palette:
+  - Deeper backgrounds (#0a0a0a) for better contrast
+  - More visible hover states (#2d2d2d)
+  - Subtle borders (#2a2a2a) and separators
+  - Improved text contrast (#e8e8e8)
+  - Consistent spacing and transitions (0.25s)
+- Consistent hover states across all interactive elements
+
 ## [3.1.0] - 2025-08-15
 
 ### Added

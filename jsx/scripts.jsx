@@ -1,5 +1,5 @@
 /* 
-   Layers Pane Plus v3.1.0 - Converted for CEP Extension
+   Layers Pane Plus v3.2.0 - Converted for CEP Extension
    This version contains the original script logic.
    
    NOTE: This ExtendScript file (jsx/scripts.jsx) is intentionally loaded from
@@ -650,8 +650,294 @@ function precomposeSelectedLayers() {
     app.endUndoGroup();
 }
 
+function duplicateLayer(includeEffects, includeExpressions, numberOfCopies) {
+    var comp = app.project.activeItem;
+    if (comp === null || !(comp instanceof CompItem)) {
+        alert("No active composition. Please create a composition first.");
+        return;
+    }
+    
+    var selectedLayers = comp.selectedLayers;
+    if (selectedLayers.length === 0) {
+        alert("No layers selected. Please select at least one layer to duplicate.");
+        return;
+    }
+    
+    app.beginUndoGroup("Duplicate Layer(s)");
+    
+    // Store information about original layers
+    var layerInfo = [];
+    for (var i = 0; i < selectedLayers.length; i++) {
+        layerInfo.push({
+            layer: selectedLayers[i],
+            index: selectedLayers[i].index
+        });
+    }
+    
+    // Sort by index (highest first) to maintain order when duplicating
+    layerInfo.sort(function(a, b) {
+        return a.index - b.index;
+    });
+    
+    var allNewLayers = [];
+    
+    // For each original layer, create the specified number of copies
+    for (var i = 0; i < layerInfo.length; i++) {
+        var originalLayer = layerInfo[i].layer;
+        
+        // Deselect all layers first
+        for (var j = 1; j <= comp.layers.length; j++) {
+            comp.layers[j].selected = false;
+        }
+        
+        // Select only the current original layer
+        originalLayer.selected = true;
+        
+        // Create multiple copies
+        for (var copyNum = 0; copyNum < numberOfCopies; copyNum++) {
+            // Store IDs of existing layers before duplicating
+            var existingLayerIds = [];
+            for (var k = 1; k <= comp.layers.length; k++) {
+                existingLayerIds.push(comp.layer(k).id);
+            }
+            
+            // Use native duplicate command
+            app.executeCommand(2080); // Native command for "Duplicate"
+            
+            // Find the newly created layer by comparing IDs
+            var duplicatedLayer = null;
+            for (var k = 1; k <= comp.layers.length; k++) {
+                var currentLayer = comp.layer(k);
+                var isExisting = false;
+                
+                // Check if this layer ID existed before
+                for (var m = 0; m < existingLayerIds.length; m++) {
+                    if (currentLayer.id === existingLayerIds[m]) {
+                        isExisting = true;
+                        break;
+                    }
+                }
+                
+                // If the layer ID is new, this is our duplicated layer
+                if (!isExisting) {
+                    duplicatedLayer = currentLayer;
+                    break;
+                }
+            }
+            
+            if (duplicatedLayer) {
+                // If user doesn't want effects, remove them
+                if (!includeEffects && duplicatedLayer.property("Effects")) {
+                    var effects = duplicatedLayer.property("Effects");
+                    while (effects.numProperties > 0) {
+                        try {
+                            effects.property(1).remove();
+                        } catch (e) {
+                            break;
+                        }
+                    }
+                }
+                
+                // If user doesn't want expressions, remove them
+                if (!includeExpressions) {
+                    removeAllExpressions(duplicatedLayer);
+                }
+                
+                // Store the layer ID (unique identifier)
+                allNewLayers.push({
+                    id: duplicatedLayer.id,
+                    name: duplicatedLayer.name
+                });
+            }
+        }
+    }
+    
+    // Deselect all
+    for (var i = 1; i <= comp.layers.length; i++) {
+        comp.layers[i].selected = false;
+    }
+    
+    // Select all newly created layers by finding them using their IDs
+    for (var i = 0; i < allNewLayers.length; i++) {
+        try {
+            var layerId = allNewLayers[i].id;
+            // Find the layer by ID
+            for (var j = 1; j <= comp.layers.length; j++) {
+                if (comp.layer(j).id === layerId) {
+                    comp.layer(j).selected = true;
+                    break;
+                }
+            }
+        } catch (e) {
+            // Layer might have been deleted or moved
+        }
+    }
+    
+    app.endUndoGroup();
+}
+
+function removeAllExpressions(layer) {
+    // Recursively remove expressions from all properties
+    function removeExpressionsFromProperty(prop) {
+        if (prop.canSetExpression && prop.expressionEnabled) {
+            prop.expressionEnabled = false;
+        }
+        
+        // Recursively check nested properties
+        if (prop.numProperties !== undefined) {
+            for (var i = 1; i <= prop.numProperties; i++) {
+                removeExpressionsFromProperty(prop.property(i));
+            }
+        }
+    }
+    
+    // Start from the layer level
+    for (var i = 1; i <= layer.numProperties; i++) {
+        removeExpressionsFromProperty(layer.property(i));
+    }
+}
+
 function createNewCompositionNative() {
     app.executeCommand(2000); // Native command for "New Composition"
+}
+
+function addMarker(target) {
+    var comp = app.project.activeItem;
+    if (comp === null || !(comp instanceof CompItem)) {
+        alert("No active composition. Please create a composition first.");
+        return;
+    }
+    
+    app.beginUndoGroup("Add Marker");
+    
+    var currentTime = comp.time;
+    
+    if (target === "comp") {
+        // Add numbered marker to composition with gap detection
+        var markerProperty = comp.markerProperty;
+        var numMarkers = markerProperty.numKeys;
+        
+        // Collect all existing marker numbers
+        var existingNumbers = [];
+        for (var i = 1; i <= numMarkers; i++) {
+            var markerValue = markerProperty.keyValue(i);
+            var markerComment = markerValue.comment;
+            
+            // Only parse if the comment contains ONLY numbers (no additional text)
+            // This regex checks if the entire string is a positive number
+            if (/^\d+$/.test(markerComment)) {
+                var num = parseInt(markerComment);
+                if (num > 0) {
+                    existingNumbers.push(num);
+                }
+            }
+        }
+        
+        // Sort the numbers to find gaps
+        existingNumbers.sort(function(a, b) { return a - b; });
+        
+        var markerNumber = 1;
+        
+        if (existingNumbers.length > 0) {
+            // Find the first missing number in the sequence
+            var foundGap = false;
+            for (var i = 0; i < existingNumbers.length; i++) {
+                var expectedNumber = i + 1;
+                if (existingNumbers[i] !== expectedNumber) {
+                    // Found a gap! Use this number
+                    markerNumber = expectedNumber;
+                    foundGap = true;
+                    break;
+                }
+            }
+            
+            // If no gap found, use the next number after the highest
+            if (!foundGap) {
+                markerNumber = existingNumbers[existingNumbers.length - 1] + 1;
+            }
+        }
+        
+        var newMarker = new MarkerValue(markerNumber.toString());
+        markerProperty.setValueAtTime(currentTime, newMarker);
+    } else {
+        // Add marker to selected layers (without numbering)
+        var selectedLayers = comp.selectedLayers;
+        if (selectedLayers.length === 0) {
+            alert("No layers selected. Please select at least one layer to add a marker.");
+            app.endUndoGroup();
+            return;
+        }
+        
+        var newMarker = new MarkerValue("");
+        for (var i = 0; i < selectedLayers.length; i++) {
+            var layer = selectedLayers[i];
+            var markerProperty = layer.property("Marker");
+            if (markerProperty) {
+                markerProperty.setValueAtTime(currentTime, newMarker);
+            }
+        }
+    }
+    
+    app.endUndoGroup();
+}
+
+function removeAllMarkers(target) {
+    var comp = app.project.activeItem;
+    if (comp === null || !(comp instanceof CompItem)) {
+        alert("No active composition. Please create a composition first.");
+        return;
+    }
+    
+    app.beginUndoGroup("Remove All Markers");
+    
+    if (target === "comp") {
+        // Remove all markers from composition
+        var markerProperty = comp.markerProperty;
+        var numMarkers = markerProperty.numKeys;
+        
+        if (numMarkers === 0) {
+            alert("No markers found in the composition.");
+            app.endUndoGroup();
+            return;
+        }
+        
+        // Remove markers in reverse order to avoid index shifting
+        for (var i = numMarkers; i >= 1; i--) {
+            markerProperty.removeKey(i);
+        }
+        
+    } else {
+        // Remove all markers from selected layers
+        var selectedLayers = comp.selectedLayers;
+        if (selectedLayers.length === 0) {
+            alert("No layers selected. Please select at least one layer to remove markers.");
+            app.endUndoGroup();
+            return;
+        }
+        
+        var totalMarkersRemoved = 0;
+        
+        for (var i = 0; i < selectedLayers.length; i++) {
+            var layer = selectedLayers[i];
+            var markerProperty = layer.property("Marker");
+            
+            if (markerProperty) {
+                var numMarkers = markerProperty.numKeys;
+                totalMarkersRemoved += numMarkers;
+                
+                // Remove markers in reverse order
+                for (var j = numMarkers; j >= 1; j--) {
+                    markerProperty.removeKey(j);
+                }
+            }
+        }
+        
+        if (totalMarkersRemoved === 0) {
+            alert("No markers found on the selected layers.");
+        }
+    }
+    
+    app.endUndoGroup();
 }
 
 function openCompSettings() {
@@ -689,6 +975,10 @@ function openLayerSettings() {
         return false;
     } else if (selectedLayer.matchName === "ADBE Vector Layer") {
         alert("Shape layers don't have a settings dialog in After Effects.\n\nUse the shape properties in the timeline panel instead.");
+        return false;
+    } else if (selectedLayer instanceof AVLayer && selectedLayer.source instanceof FootageItem) {
+        // Check if it's a footage layer (image, video, audio)
+        alert("Footage layers (images, videos, audio) don't have a settings dialog in After Effects.\n\nTo modify the source, use the Project panel or Interpret Footage dialog.");
         return false;
     }
     

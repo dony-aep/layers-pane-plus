@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ExtensionManifest Version="7.0" ExtensionBundleId="com.dony.LayersPanePlus" ExtensionBundleVersion="3.1.0" ExtensionBundleName="Layers Pane Plus">
+<ExtensionManifest Version="7.0" ExtensionBundleId="com.dony.LayersPanePlus" ExtensionBundleVersion="3.2.0" ExtensionBundleName="Layers Pane Plus">
     <ExtensionList>
-        <Extension Id="com.dony.LayersPanePlus.panel" Version="3.1.0"/>
+        <Extension Id="com.dony.LayersPanePlus.panel" Version="3.2.0"/>
     </ExtensionList>
     <ExecutionEnvironment>
         <HostList>

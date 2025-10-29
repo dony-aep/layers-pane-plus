@@ -5,6 +5,59 @@ Todos los cambios notables de la extensión Layers Pane Plus serán documentados
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 y este proyecto se adhiere al [Versionado Semántico](https://semver.org/spec/v2.0.0.html).
 
+## [3.2.0] - 2025-10-21
+
+### Añadido
+- **Funcionalidad de Duplicar Capa(s)** con opciones avanzadas:
+  - Duplicar con/sin efectos
+  - Duplicar con/sin expresiones
+  - Crear múltiples copias (1-100) con una sola acción
+  - Sistema inteligente de selección basado en IDs - todas las capas duplicadas permanecen seleccionadas
+  - Funciona con selección múltiple de capas
+  - Algoritmo de detección robusto que no depende de nombres o índices de capas
+- **Funcionalidad de Administrador de Marcadores**:
+  - Agregar marcadores a capas seleccionadas o composición en el tiempo actual
+  - Eliminar todos los marcadores de capas seleccionadas o composición completa
+  - Selector de objetivo (Capa/Comp) con botones de radio
+  - Validación inteligente - alertas cuando no hay capas seleccionadas o no existen marcadores
+  - Operaciones de marcadores por lotes con contador de retroalimentación
+- Sistema de modal unificado - Configuración y Ayuda ahora accesibles a través de un solo modal con pestañas internas
+- Menú flotante con efecto de desenfoque en la esquina inferior derecha para acceso rápido a Configuración
+- Nuevos estilos de botones: `.button-group-horizontal` para diseño de botones de acción y `.action-btn` para botones de administración de marcadores
+
+### Mejorado
+- Rediseño completo de UI con paleta de colores en escala de grises moderna y jerarquía visual mejorada
+- Incremento de border-radius en todos los elementos (botones, contenedores, modales) para un aspecto más moderno
+- Diseño de scrollbar mejorado - más grande (14px) y más visible para mejor usabilidad
+- Header y footer sticky en modal - siempre visibles al hacer scroll en el contenido
+- Barra de pestañas ahora cuenta con efecto de desenfoque de fondo para un aspecto moderno de glass-morphism
+- Todos los colores centralizados en variables CSS para facilitar la gestión de temas
+- Sección de Ayuda rediseñada con diseño basado en cuadrícula y características categorizadas:
+  - Herramientas de Creación de Capas
+  - Herramientas de Edición de Capas (incluyendo Duplicar y Administrador de Marcadores)
+  - Características Inteligentes (Opciones de Duplicación, Duplicación por Lotes, Marcadores de Capa/Comp)
+- Validación de Ajustes de Capa ahora incluye capas de footage (imágenes, videos, audio) con mensajes útiles
+
+### Cambiado
+- Eliminada pestaña "Options" de la interfaz principal - Configuración ahora accesible vía menú flotante
+- Estructura de modal con header "General" y navegación de pestañas organizadas (Configuración primero, luego Ayuda)
+- Efectos hover ahora usan solo transiciones de color (removidas animaciones de transformación)
+- Ajustes de diseño responsivo para pantallas pequeñas - menú flotante se adapta a pantallas más pequeñas
+
+### Corregido
+- Scroll del modal ahora limitado solo al área de contenido, footer permanece fijo
+- Función de duplicar capas ahora crea correctamente el número exacto de copias solicitado
+- Todas las capas duplicadas seleccionadas apropiadamente después de la operación sin importar la cantidad
+
+### UI/UX
+- Renovación completa del sistema de colores con paleta refinada en escala de grises:
+  - Fondos más profundos (#0a0a0a) para mejor contraste
+  - Estados hover más visibles (#2d2d2d)
+  - Bordes sutiles (#2a2a2a) y separadores
+  - Contraste de texto mejorado (#e8e8e8)
+  - Espaciado y transiciones consistentes (0.25s)
+- Estados hover consistentes en todos los elementos interactivos
+
 ## [3.1.0] - 2025-08-15
 
 ### Añadido

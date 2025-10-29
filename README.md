@@ -9,7 +9,7 @@
 Layers Pane Plus is an advanced extension for Adobe After Effects that provides extended functionality for layer creation and management. Previously distributed as a single script, Layers Pane Plus has evolved into a comprehensive extension that offers a more robust, modern, and integrated After Effects experience.
 
 ## Current Version
-**v3.1.0** - Latest update: Added reverse sequence functionality, enhanced multiple layer support for native dialog layers, improved Layer Settings validation, and updated documentation links.
+**v3.2.0** - Latest update: Complete UI overhaul with modern design system, unified modal interface, duplicate layers functionality, markers manager, and enhanced user experience.
 
 ## Installation
 1. Locate the Adobe After Effects CEP Extensions folder:

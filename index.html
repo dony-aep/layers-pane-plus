@@ -25,10 +25,6 @@
                 <span class="material-symbols-outlined">edit</span>
                 <span>Edit</span>
             </button>
-            <button class="tab" data-section="settings" title="Configure extension options">
-                <span class="material-symbols-outlined">settings</span>
-                <span>Options</span>
-            </button>
         </div>
         
         <!-- Section: Layer Creation -->
@@ -150,10 +146,73 @@
                     </div>
                 </div>
                 
+                <div class="button-container">
+                    <button id="duplicateLayerBtn" class="icon-btn" title="Duplicate Selected Layers">
+                        <img class="button-icon" src="images/path_to_duplicate_icon.png" alt="Duplicate Icon">
+                        <span>Duplicate</span>
+                    </button>
+                    <button class="toggle-options" data-target="duplicateOptions" title="Toggle duplicate options">
+                        <span class="material-symbols-outlined">expand_more</span>
+                    </button>
+                    <div id="duplicateOptions" class="options-container hidden">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="duplicateWithEffectsCheckbox" checked title="Duplicate layers with effects">
+                            <label for="duplicateWithEffectsCheckbox" title="Duplicate layers with effects">Include Effects</label>
+                        </div>
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="duplicateWithExpressionsCheckbox" checked title="Duplicate layers with expressions">
+                            <label for="duplicateWithExpressionsCheckbox" title="Duplicate layers with expressions">Include Expressions</label>
+                        </div>
+                        <div class="number-container">
+                            <span class="number-label">Number of copies:</span>
+                            <div class="number-input-container">
+                                <button id="decrementCopiesBtn" class="frame-control-btn" title="Decrease copies">
+                                    <span class="material-symbols-outlined">remove</span>
+                                </button>
+                                <input type="number" id="duplicateCopiesInput" min="1" max="100" value="1" title="Number of duplicates to create">
+                                <button id="incrementCopiesBtn" class="frame-control-btn" title="Increase copies">
+                                    <span class="material-symbols-outlined">add</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
                 <button id="precomposeBtn" class="icon-btn" title="Precompose Layers">
                     <img class="button-icon" src="images/path_to_precompose_icon.png" alt="Precompose Icon">
                     <span>Precompose</span>
                 </button>
+                
+                <div class="button-container">
+                    <button id="markersBtn" class="icon-btn" title="Markers Manager">
+                        <img class="button-icon" src="images/path_to_markers_icon.png" alt="Markers Icon">
+                        <span>Markers</span>
+                    </button>
+                    <button class="toggle-options" data-target="markersOptions" title="Toggle markers options">
+                        <span class="material-symbols-outlined">expand_more</span>
+                    </button>
+                    <div id="markersOptions" class="options-container hidden">
+                        <div class="radio-container">
+                            <span class="radio-label">Target:</span>
+                            <div class="radio-group">
+                                <input type="radio" id="markerLayerRadio" name="markerTarget" value="layer" checked>
+                                <label for="markerLayerRadio">Layer</label>
+                                <input type="radio" id="markerCompRadio" name="markerTarget" value="comp">
+                                <label for="markerCompRadio">Comp</label>
+                            </div>
+                        </div>
+                        <div class="button-group-horizontal">
+                            <button id="addMarkerBtn" class="action-btn" title="Add marker at current time">
+                                <span class="material-symbols-outlined">add</span>
+                                <span>Add Marker</span>
+                            </button>
+                            <button id="removeMarkersBtn" class="action-btn" title="Remove all markers">
+                                <span class="material-symbols-outlined">delete</span>
+                                <span>Remove All</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
                 
                 <button id="createCompBtn" class="icon-btn" title="Create New Composition">
                     <img class="button-icon" src="images/path_to_create_comp_icon.png" alt="New Comp Icon">
@@ -170,122 +229,212 @@
             </div>
         </div>
         
-        <!-- Section: Settings & Help -->
-        <div id="section-settings" class="section">
-            <div class="group">
-                <button id="helpBtn" class="icon-btn" title="Help">
-                    <img class="button-icon" src="images/path_to_help_icon.png" alt="Help Icon">
-                    <span>Help</span>
-                </button>
-                <button id="openSettingsBtn" class="icon-btn" title="Open Settings Panel">
-                    <img class="button-icon" src="images/path_to_settings_icon.png" alt="Settings Icon">
-                    <span>Settings</span>
-                </button>
-            </div>
-            <div class="footer">
-                <p>
-                    Made by 
-                    <a class="footer-link" title="Visit donyaep.vercel.app" href="https://donyaep.vercel.app/" target="_blank" rel="noopener noreferrer">
-                        dony.
-                    </a>
-                </p>
-            </div>
+        <!-- Footer (Always Visible) -->
+        <div class="footer">
+            <p>
+                Made by 
+                <a class="footer-link" title="Visit donyaep.vercel.app" href="https://donyaep.vercel.app/" target="_blank" rel="noopener noreferrer">
+                    dony.
+                </a>
+            </p>
         </div>
         
-        <!-- Settings Modal -->
-        <div id="settingsModal" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2>Layers Pane Plus Settings</h2>
-                    <button class="close-modal" title="Close settings">
-                        <span class="material-symbols-outlined" title="Close">close</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="settings-section">
-                        <h3>Layer Creation Options</h3>
-                        <div class="checkbox-container modal-checkbox">
-                            <input type="checkbox" id="autoParentLayersCheckbox" title="Automatically parent selected layers to new layers">
-                            <label for="autoParentLayersCheckbox" title="Automatically parent selected layers to new layers">Auto Parent Layers</label>
-                        </div>
-                        <div class="checkbox-container modal-checkbox">
-                            <input type="checkbox" id="matchDurationCheckbox" title="Match duration of new layers to selected layers">
-                            <label for="matchDurationCheckbox" title="Match duration of new layers to selected layers">Match Layer Duration</label>
-                        </div>
-                        <p class="settings-note">Note: Layer Creation Options work with all layer types (Text, Shape, Null, Adjustment, Solid, Light, and Camera layers).</p>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <div class="version-info">Version: 3.1.0</div>
-                    <div class="modal-buttons">
-                        <button id="saveSettingsBtn" class="modal-btn save-btn" title="Save settings and close">Save</button>
-                        <button id="cancelSettingsBtn" class="modal-btn cancel-btn" title="Close without saving changes">Cancel</button>
-                    </div>
-                </div>
-            </div>
+        <!-- Floating Menu -->
+        <div class="floating-menu">
+            <button id="floatingSettingsBtn" class="floating-menu-btn" title="Settings">
+                <span class="material-symbols-outlined">settings</span>
+                <span>Settings</span>
+            </button>
         </div>
-
-        <!-- Help Modal -->
-        <div id="helpModal" class="modal">
+        
+        <!-- Unified Modal -->
+        <div id="unifiedModal" class="modal">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2>Help and Documentation</h2>
-                    <button class="close-modal" title="Close help">
+                    <h2 class="modal-title">General</h2>
+                    <button class="close-modal" title="Close">
                         <span class="material-symbols-outlined" title="Close">close</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <div class="help-section">
-                        <div class="help-content-panel">
-                            <h3>Features</h3>
-                            <div class="help-content-text">
-                                <p><strong>Layer Creation Tools:</strong></p>
-                                <ul>
-                                    <li>Text Layer - Creates a new text layer</li>
-                                    <li>Solid Layer - Creates a new solid layer</li>
-                                    <li>Light - Creates a new light</li>
-                                    <li>Camera - Creates a new camera</li>
-                                    <li>Null Object - Creates a new null object</li>
-                                    <li>Shape Layer - Creates a new shape layer</li>
-                                    <li>Adjustment Layer - Creates a new adjustment layer</li>
-                                </ul>
-                                <p><strong>Editing Tools:</strong></p>
-                                <ul>
-                                    <li>Delete - Removes selected layers</li>
-                                    <li>Sequence - Creates a sequence from selected layers</li>
-                                    <li>Split - Splits layers at current time</li>
-                                    <li>Precompose - Precomposes selected layers</li>
-                                    <li>New Composition - Creates a new composition</li>
-                                </ul>
-                                <p><strong>Settings & Options:</strong></p>
-                                <ul>
-                                    <li>Auto Parent Layers - Automatically parents selected layers</li>
-                                    <li>Match Layer Duration - Matches duration of new layers</li>
-                                    <li>Auto Delete Split Parts - Automatically deletes split parts</li>
-                                    <li>Show Delete Confirmation - Shows confirmation before deleting</li>
-                                </ul>
-                                <p class="help-note">Note: Auto Parent and Match Duration options now work with all layer types.</p>
+                
+                <div class="modal-tabs">
+                    <button class="modal-tab active" data-modal-section="settings">
+                        <span class="material-symbols-outlined">settings</span>
+                        <span>Settings</span>
+                    </button>
+                    <button class="modal-tab" data-modal-section="help">
+                        <span class="material-symbols-outlined">help</span>
+                        <span>Help</span>
+                    </button>
+                </div>
+                
+                <!-- Settings Section -->
+                <div id="modal-section-settings" class="modal-section active">
+                    <div class="modal-body">
+                        <div class="settings-section">
+                            <h3>Layer Creation Options</h3>
+                            <div class="checkbox-container modal-checkbox">
+                                <input type="checkbox" id="autoParentLayersCheckbox" title="Automatically parent selected layers to new layers">
+                                <label for="autoParentLayersCheckbox" title="Automatically parent selected layers to new layers">Auto Parent Layers</label>
                             </div>
+                            <div class="checkbox-container modal-checkbox">
+                                <input type="checkbox" id="matchDurationCheckbox" title="Match duration of new layers to selected layers">
+                                <label for="matchDurationCheckbox" title="Match duration of new layers to selected layers">Match Layer Duration</label>
+                            </div>
+                            <p class="settings-note">Note: Layer Creation Options work with all layer types (Text, Shape, Null, Adjustment, Solid, Light, and Camera layers).</p>
                         </div>
-                        <div class="help-contact-panel">
-                            <p>For support and updates, visit:</p>
-                            <div class="help-link-group">
-                                <div class="input-with-feedback">
-                                    <input type="text" id="helpLinkText" value="donyaep.vercel.app/" readonly>
-                                    <span class="copy-feedback">
-                                        <span class="material-symbols-outlined">check</span>
-                                    </span>
-                                </div>
-                                <button id="helpCopyBtn" class="modal-btn" title="Copy link to clipboard">Copy</button>
-                                <button id="helpOpenBtn" class="modal-btn" title="Open link in browser">Open</button>
-                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="version-info">Version: 3.2.0</div>
+                        <div class="modal-buttons">
+                            <button id="saveSettingsBtn" class="modal-btn save-btn" title="Save settings and close">Save</button>
+                            <button id="cancelSettingsBtn" class="modal-btn cancel-btn" title="Close without saving changes">Cancel</button>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <div class="version-info">Layers Pane Plus v3.1.0</div>
-                    <div class="modal-buttons">
-                        <button id="closeHelpBtn" class="modal-btn save-btn" title="Close help">Close</button>
+                
+                <!-- Help Section -->
+                <div id="modal-section-help" class="modal-section">
+                    <div class="modal-body">
+                        <div class="help-section">
+                            <div class="help-intro">
+                                <h3>Welcome to Layers Pane Plus</h3>
+                                <p>A powerful extension for Adobe After Effects that streamlines your layer management workflow.</p>
+                            </div>
+                            
+                            <div class="features-grid">
+                                <div class="feature-category">
+                                    <div class="feature-category-header">
+                                        <span class="material-symbols-outlined">layers</span>
+                                        <h4>Layer Creation</h4>
+                                    </div>
+                                    <div class="feature-list">
+                                        <div class="feature-item">
+                                            <span class="feature-name">Text Layer</span>
+                                            <span class="feature-desc">Create text layers with custom content</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-name">Solid Layer</span>
+                                            <span class="feature-desc">Generate solid color layers</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-name">Shape Layer</span>
+                                            <span class="feature-desc">Create vector shape layers</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-name">Null Object</span>
+                                            <span class="feature-desc">Add null objects for parenting</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-name">Adjustment Layer</span>
+                                            <span class="feature-desc">Create adjustment layers for effects</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-name">Light & Camera</span>
+                                            <span class="feature-desc">Add 3D lights and cameras</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="feature-category">
+                                    <div class="feature-category-header">
+                                        <span class="material-symbols-outlined">edit</span>
+                                        <h4>Layer Editing</h4>
+                                    </div>
+                                    <div class="feature-list">
+                                        <div class="feature-item">
+                                            <span class="feature-name">Delete Layers</span>
+                                            <span class="feature-desc">Remove selected layers with confirmation</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-name">Duplicate Layers</span>
+                                            <span class="feature-desc">Duplicate layers with control over effects and expressions</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-name">Sequence Layers</span>
+                                            <span class="feature-desc">Arrange layers in sequence with options</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-name">Split Layers</span>
+                                            <span class="feature-desc">Split layers at current time with trim options</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-name">Precompose</span>
+                                            <span class="feature-desc">Combine layers into compositions</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-name">New Composition</span>
+                                            <span class="feature-desc">Create new compositions quickly</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-name">Settings Access</span>
+                                            <span class="feature-desc">Quick access to comp and layer settings</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-name">Markers Manager</span>
+                                            <span class="feature-desc">Add and remove markers on layers or composition</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="feature-category">
+                                    <div class="feature-category-header">
+                                        <span class="material-symbols-outlined">tune</span>
+                                        <h4>Smart Features</h4>
+                                    </div>
+                                    <div class="feature-list">
+                                        <div class="feature-item">
+                                            <span class="feature-name">Auto Parent</span>
+                                            <span class="feature-desc">Automatically parent selected layers to new ones</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-name">Match Duration</span>
+                                            <span class="feature-desc">Match new layer duration to selection</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-name">Auto Delete Split</span>
+                                            <span class="feature-desc">Automatically delete split portions</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-name">Reverse Sequence</span>
+                                            <span class="feature-desc">Create sequences in reverse order</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-name">Duplicate Options</span>
+                                            <span class="feature-desc">Control effects, expressions, and number of copies</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-name">Batch Duplication</span>
+                                            <span class="feature-desc">Create up to 100 copies at once</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-name">Layer Markers</span>
+                                            <span class="feature-desc">Add markers to selected layers at current time</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-name">Comp Markers</span>
+                                            <span class="feature-desc">Add markers to composition timeline</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="help-contact-panel">
+                                <p>For support and updates, visit:</p>
+                                <div class="help-link-group">
+                                    <div class="input-with-feedback">
+                                        <input type="text" id="helpLinkText" value="donyaep.vercel.app/" readonly>
+                                        <span class="copy-feedback">
+                                            <span class="material-symbols-outlined">check</span>
+                                        </span>
+                                    </div>
+                                    <button id="helpCopyBtn" class="modal-btn" title="Copy link to clipboard">Copy</button>
+                                    <button id="helpOpenBtn" class="modal-btn" title="Open link in browser">Open</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="version-info">Layers Pane Plus v3.2.0</div>
                     </div>
                 </div>
             </div>
