@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ExtensionList>
-    <Extension Id="com.dony.layerspaneplus">
+    <Extension Id="com.dony.LayersPanePlus.panel">
         <HostList>
-            <Host Name="AEFT" Port="8093"/>
+            <Host Name="AEFT" Port="8088"/>
         </HostList>
     </Extension>
 </ExtensionList>

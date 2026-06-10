@@ -9,7 +9,14 @@
 Layers Pane Plus is an advanced extension for Adobe After Effects that provides extended functionality for layer creation and management. Previously distributed as a single script, Layers Pane Plus has evolved into a comprehensive extension that offers a more robust, modern, and integrated After Effects experience.
 
 ## Current Version
-**v3.2.0** - Latest update: Complete UI overhaul with modern design system, unified modal interface, duplicate layers functionality, markers manager, and enhanced user experience.
+**v4.0.0** - Major rewrite: migrated to a modern, modular architecture (React + TypeScript, bundled with Vite). Redesigned UI, a new Markers mover, and a far more maintainable codebase. See [CHANGELOG.md](CHANGELOG.md).
+
+## What's New in v4.0.0
+- **Rebuilt from the ground up** on a modular React + TypeScript codebase (bundled with Vite), replacing the previous single-file script — easier to maintain and extend.
+- **Refreshed monochrome UI** built with accessible components (keyboard navigation, tooltips), keeping the familiar tabbed layout and custom icons.
+- **New Markers tool:** detect existing markers in the active composition and reposition them — individually or as a group — working in frames, with a timecode display based on the composition's frame rate.
+- **Responsive grid** (1–2 columns) and a cleaner unified Settings/Help modal.
+- **Updated compatibility:** now targets After Effects 2022 (22.0) and newer.
 
 ## Installation
 1. Locate the Adobe After Effects CEP Extensions folder:

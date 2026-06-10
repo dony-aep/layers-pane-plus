@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ExtensionManifest Version="7.0" ExtensionBundleId="com.dony.LayersPanePlus" ExtensionBundleVersion="3.2.0" ExtensionBundleName="Layers Pane Plus">
+<ExtensionManifest Version="11.0" ExtensionBundleId="com.dony.LayersPanePlus" ExtensionBundleVersion="__APP_VERSION__"
+    ExtensionBundleName="Layers Pane Plus" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <ExtensionList>
-        <Extension Id="com.dony.LayersPanePlus.panel" Version="3.2.0"/>
+        <Extension Id="com.dony.LayersPanePlus.panel" Version="__APP_VERSION__"/>
     </ExtensionList>
     <ExecutionEnvironment>
         <HostList>
-            <!-- Compatibility minimum with Adobe After Effects CC (2014) (version 13.0) and above -->
-            <Host Name="AEFT" Version="13.0"/>
+            <!-- After Effects 2022 (22.0) and above – CEP 11 / Chromium 88. Floor raised to 22.0
+                 because duplicateLayer relies on Layer.id, introduced in After Effects 22.0. -->
+            <Host Name="AEFT" Version="22.0"/>
         </HostList>
         <LocaleList>
             <Locale Code="All"/>
@@ -20,10 +22,7 @@
             <DispatchInfo>
                 <Resources>
                     <MainPath>./index.html</MainPath>
-                    <ScriptPath>./js/main.js</ScriptPath>
-                    <CEFCommandLine>
-                        <Parameter>--enable-nodejs</Parameter>
-                    </CEFCommandLine>
+                    <ScriptPath>./jsx/scripts.jsx</ScriptPath>
                 </Resources>
                 <Lifecycle>
                     <AutoVisible>true</AutoVisible>
@@ -34,11 +33,19 @@
                     <Geometry>
                         <Size>
                             <Height>400</Height>
-                            <Width>600</Width>
+                            <Width>320</Width>
                         </Size>
+                        <MinSize>
+                            <Height>200</Height>
+                            <Width>240</Width>
+                        </MinSize>
+                        <MaxSize>
+                            <Height>900</Height>
+                            <Width>600</Width>
+                        </MaxSize>
                     </Geometry>
                 </UI>
             </DispatchInfo>
         </Extension>
     </DispatchInfoList>
-</ExtensionManifest> 
+</ExtensionManifest>

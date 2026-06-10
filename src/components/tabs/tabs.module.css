@@ -1,0 +1,38 @@
+.group {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  padding: 15px;
+  margin: 10px 0;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+/* Max 2 columns: single column when narrow, two when there is room */
+@media (min-width: 300px) {
+  .group { grid-template-columns: 1fr 1fr; }
+}
+
+.actionsRow { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.drawerBtn {
+  flex: 1 1 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 8px 10px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  outline: none;
+  transition: background-color var(--duration) var(--ease), border-color var(--duration) var(--ease);
+}
+.drawerBtn[data-hovered] { background: var(--bg-hover); border-color: var(--border-hover); }
+.drawerBtn[data-pressed] { transform: scale(0.97); }
+.drawerBtn .material-symbols-outlined { font-size: 24px; }

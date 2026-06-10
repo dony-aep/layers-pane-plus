@@ -1,0 +1,135 @@
+/* Footer trigger button */
+.gear {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  outline: none;
+  transition: background-color var(--duration) var(--ease), color var(--duration) var(--ease);
+}
+.gear[data-hovered] { background: var(--accent-subtle); color: var(--text-primary); }
+.gear .material-symbols-outlined { font-size: 26px; }
+
+/* Overlay + modal */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+.overlay[data-entering] { animation: fadeIn var(--duration) var(--ease); }
+.overlay[data-exiting] { animation: fadeIn var(--duration) var(--ease) reverse; }
+
+.modal {
+  width: 100%;
+  max-width: 360px;
+  max-height: calc(100% - 24px);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+}
+.modal[data-entering] { animation: popIn var(--duration) var(--ease); }
+
+.dialog { outline: none; display: flex; flex-direction: column; max-height: calc(100vh - 36px); }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes popIn { from { opacity: 0; transform: scale(0.96) translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.title { font-size: 15px; font-weight: 600; color: var(--text-primary); }
+.close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  cursor: pointer;
+  outline: none;
+  transition: background-color var(--duration) var(--ease), color var(--duration) var(--ease);
+}
+.close[data-hovered] { background: var(--accent-muted); color: var(--text-primary); }
+
+/* Modal tabs */
+.modalTabs { display: flex; gap: 4px; padding: 10px 16px 0; }
+.modalTab {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 12px;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  outline: none;
+  transition: background-color var(--duration) var(--ease), color var(--duration) var(--ease);
+}
+.modalTab .material-symbols-outlined { font-size: 25px; }
+.modalTab[data-hovered] { background: var(--bg-hover); color: var(--text-primary); }
+.modalTab[data-selected] { background: var(--bg-active); color: var(--text-primary); }
+
+/* Body */
+.body { padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; outline: none; }
+.sectionTitle { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+.note { font-size: 11.5px; color: var(--text-muted); line-height: 1.4; }
+.helpText { font-size: 12.5px; color: var(--text-secondary); line-height: 1.5; }
+
+/* Settings footer */
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 12px;
+  margin-top: 4px;
+  border-top: 1px solid var(--border);
+}
+.version { font-size: 11px; color: var(--text-muted); }
+.footerBtns { display: flex; gap: 8px; }
+
+.saveBtn, .cancelBtn, .miniBtn {
+  padding: 7px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  border: 1px solid transparent;
+  transition: background-color var(--duration) var(--ease);
+}
+.saveBtn { background: var(--accent); color: var(--bg-base); }
+.saveBtn[data-hovered] { background: #e0e0e0; }
+.cancelBtn { background: var(--bg-surface); color: var(--text-primary); border-color: var(--border); }
+.cancelBtn[data-hovered] { background: var(--bg-hover); }
+
+/* Help link row */
+.linkRow { display: flex; gap: 8px; align-items: center; }
+.miniBtn { background: var(--bg-surface); color: var(--text-primary); border-color: var(--border); font-weight: 500; }
+.miniBtn[data-hovered] { background: var(--bg-hover); }
