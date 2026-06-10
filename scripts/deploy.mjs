@@ -6,7 +6,7 @@ import { cpSync, existsSync, mkdirSync, rmSync } from 'fs'
 import { join } from 'path'
 import { fileURLToPath } from 'url'
 
-const EXTENSION_ID = 'com.dony.LayersPanePlus'
+const EXTENSION_ID = 'com.donyaep.LayersPanePlus'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 const projectRoot = join(__dirname, '..')

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ExtensionManifest Version="11.0" ExtensionBundleId="com.dony.LayersPanePlus" ExtensionBundleVersion="__APP_VERSION__"
+<ExtensionManifest Version="11.0" ExtensionBundleId="com.donyaep.LayersPanePlus" ExtensionBundleVersion="__APP_VERSION__"
     ExtensionBundleName="Layers Pane Plus" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <ExtensionList>
-        <Extension Id="com.dony.LayersPanePlus.panel" Version="__APP_VERSION__"/>
+        <Extension Id="com.donyaep.LayersPanePlus.panel" Version="__APP_VERSION__"/>
     </ExtensionList>
     <ExecutionEnvironment>
         <HostList>
@@ -18,7 +18,7 @@
         </RequiredRuntimeList>
     </ExecutionEnvironment>
     <DispatchInfoList>
-        <Extension Id="com.dony.LayersPanePlus.panel">
+        <Extension Id="com.donyaep.LayersPanePlus.panel">
             <DispatchInfo>
                 <Resources>
                     <MainPath>./index.html</MainPath>

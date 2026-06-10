@@ -37,7 +37,7 @@ Layers Pane Plus es una extensión avanzada para Adobe After Effects que proporc
    C:\Program Files (x86)\Common Files\Adobe\CEP\extensions
    ```
    (o, por usuario: `%APPDATA%\Adobe\CEP\extensions`)
-2. Coloca la carpeta de la extensión compilada (`com.dony.LayersPanePlus`) en esa carpeta.
+2. Coloca la carpeta de la extensión compilada (`com.donyaep.LayersPanePlus`) en esa carpeta.
 3. Inicia After Effects y abre la extensión desde **Ventana > Extensiones > Layers Pane Plus**.
 
 > Las builds de desarrollo sin firmar requieren activar el modo debug de CEP una vez:

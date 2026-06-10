@@ -6,7 +6,7 @@ import { resolve } from 'path'
 const pkg = JSON.parse(readFileSync('./package.json', 'utf-8'))
 
 // CEP extension bundle id – used as the deploy target folder name
-export const EXTENSION_ID = 'com.dony.LayersPanePlus'
+export const EXTENSION_ID = 'com.donyaep.LayersPanePlus'
 
 // Injects the package.json version into the built manifest.xml (replaces __APP_VERSION__)
 function syncManifestVersion() {
