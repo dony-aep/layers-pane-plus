@@ -1,0 +1,71 @@
+.cell { position: relative; display: flex; flex-direction: column; }
+
+.btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  min-height: 66px;
+  padding: 12px 8px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  cursor: pointer;
+  outline: none;
+  transition: background-color var(--duration) var(--ease),
+              border-color var(--duration) var(--ease),
+              transform 0.1s var(--ease);
+}
+
+.icon { width: 24px; height: 24px; opacity: 0.5; transition: opacity var(--duration) var(--ease); }
+.label { font-size: 13px; font-weight: 500; color: var(--text-primary); text-align: center; }
+
+.btn[data-hovered] { background: var(--bg-hover); border-color: var(--border-hover); }
+.btn[data-hovered] .icon { opacity: 0.9; }
+.btn[data-pressed] { transform: scale(0.97); }
+.btn[data-focus-visible] { outline: 1px solid rgba(255, 255, 255, 0.4); outline-offset: 2px; }
+
+/* Expand chevron (does not alter the button) */
+.chev {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background-color var(--duration) var(--ease),
+              color var(--duration) var(--ease),
+              transform var(--duration) var(--ease);
+}
+.chev[data-hovered] { background: var(--accent-muted); color: var(--text-primary); }
+.chev .material-symbols-outlined { font-size: 24px; }
+.chevOpen { transform: rotate(180deg); }
+
+/* Options drawer — inside the cell, directly below the button */
+.options {
+  width: 100%;
+  margin-top: 8px;
+  padding: 10px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation: optionsIn var(--duration) var(--ease);
+}
+
+@keyframes optionsIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}

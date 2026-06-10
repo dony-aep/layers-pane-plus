@@ -1,0 +1,135 @@
+/* ---- Checkbox ---- */
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text-primary);
+}
+.box {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  border: 1px solid var(--border-accent);
+  border-radius: 5px;
+  background: var(--bg-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--bg-base);
+  transition: background-color var(--duration) var(--ease), border-color var(--duration) var(--ease);
+}
+.box svg { width: 11px; height: 11px; opacity: 0; transition: opacity var(--duration) var(--ease); }
+.checkbox[data-selected] .box { background: var(--accent); border-color: var(--accent); }
+.checkbox[data-selected] .box svg { opacity: 1; }
+.checkbox[data-focus-visible] .box { outline: 1px solid rgba(255, 255, 255, 0.4); outline-offset: 2px; }
+
+/* ---- Counter (NumberField) ---- */
+.counter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 10px;
+  flex-wrap: wrap;
+}
+.counterLabel { font-size: 13px; color: var(--text-secondary); }
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 2px;
+}
+.stepBtn {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background-color var(--duration) var(--ease), color var(--duration) var(--ease);
+}
+.stepBtn[data-hovered] { background: var(--bg-hover); color: var(--text-primary); }
+.stepBtn .material-symbols-outlined { font-size: 24px; }
+.stepInput {
+  width: 34px;
+  text-align: center;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 13px;
+  outline: none;
+}
+
+/* ---- Radio (segmented) ---- */
+.radioRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 10px;
+  flex-wrap: wrap;
+}
+.radioLabel { font-size: 13px; color: var(--text-secondary); }
+.radios { display: flex; gap: 6px; }
+.radio {
+  display: flex;
+  align-items: center;
+  padding: 4px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  font-size: 12.5px;
+  cursor: pointer;
+  transition: background-color var(--duration) var(--ease), border-color var(--duration) var(--ease), color var(--duration) var(--ease);
+}
+.radio[data-selected] { background: var(--bg-active); border-color: var(--border-accent); color: var(--text-primary); }
+.radio[data-focus-visible] { outline: 1px solid rgba(255, 255, 255, 0.4); outline-offset: 2px; }
+
+/* ---- Text input ---- */
+.inputWrap {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+.inputWrap .input { padding-right: 32px; }
+.inputClear {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 5px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background-color var(--duration) var(--ease), color var(--duration) var(--ease);
+}
+.inputClear:hover { background: var(--bg-hover); color: var(--text-primary); }
+.inputClear:focus-visible { outline: 1px solid rgba(255, 255, 255, 0.4); outline-offset: 1px; }
+.inputClear .material-symbols-outlined { font-size: 16px; }
+.input {
+  width: 100%;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  outline: none;
+  transition: border-color var(--duration) var(--ease);
+}
+.input[data-focused], .input:focus { border-color: var(--border-accent); }

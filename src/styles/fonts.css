@@ -1,0 +1,20 @@
+/* Local fonts — bundled offline (no Google Fonts CDN). CEP panels may run without network. */
+
+/* Google Sans (variable, latin subset covers 400–700 + Western/Spanish accents) */
+@font-face {
+  font-family: 'Google Sans';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('./fonts/google-sans.woff2') format('woff2');
+}
+
+/* Material Symbols Outlined — subset with only the 12 icons used in the UI:
+   add, arrow_forward, close, delete, edit, expand_more, help, layers, moving, remove, search, settings */
+@font-face {
+  font-family: 'Material Symbols Outlined';
+  font-style: normal;
+  font-weight: 100 700;
+  font-display: block;
+  src: url('./fonts/material-symbols-outlined.woff2') format('woff2');
+}

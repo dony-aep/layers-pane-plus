@@ -5,6 +5,19 @@ Todos los cambios notables de la extensión Layers Pane Plus serán documentados
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 y este proyecto se adhiere al [Versionado Semántico](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.0] - 2026-06-01
+
+### Cambiado
+- **Migración de arquitectura mayor:** reconstruida de un script vanilla único a una extensión modular React + TypeScript compilada con Vite. La UI y la lógica host de ExtendScript ahora están separadas y son más fáciles de mantener.
+- Interfaz rediseñada (tema monocromático, Google Sans) con componentes accesibles (navegación por teclado y tooltips), manteniendo el layout de pestañas familiar y los iconos propios.
+- El grid de acciones ahora es responsive con un máximo de 2 columnas.
+
+### Añadido
+- **Movedor de marcadores:** detecta los marcadores existentes en la composición activa y reubícalos individual o grupalmente, trabajando en frames con timecode según los FPS de la composición.
+
+### Compatibilidad
+- Versión mínima elevada a After Effects 2022 (22.0) / CEP 11, requerida por el stack de UI moderno y la API de scripting `Layer.id`.
+
 ## [3.2.0] - 2025-10-21
 
 ### Añadido

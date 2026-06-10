@@ -5,6 +5,19 @@ All notable changes to Layers Pane Plus extension will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.0] - 2026-06-01
+
+### Changed
+- **Major architectural migration:** rebuilt from a single vanilla script into a modular React + TypeScript extension bundled with Vite. The UI and the ExtendScript host logic are now cleanly separated and easier to maintain.
+- Redesigned interface (monochrome theme, Google Sans) using accessible components (keyboard navigation and tooltips), while keeping the familiar tabbed layout and custom icons.
+- Action grid is now responsive with a maximum of 2 columns.
+
+### Added
+- **Markers mover:** detect existing markers in the active composition and reposition them individually or as a group, working in frames with a timecode display based on the composition's frame rate.
+
+### Compatibility
+- Minimum supported version raised to After Effects 2022 (22.0) / CEP 11, required by the modern UI stack and the `Layer.id` scripting API.
+
 ## [3.2.0] - 2025-10-21
 
 ### Added
