@@ -2,7 +2,7 @@
 
 [![English](https://img.shields.io/badge/Language-English-blue.svg)](README.md)
 [![Español](https://img.shields.io/badge/Idioma-Español-red.svg)](README_ES.md)
-[![Version](https://img.shields.io/badge/version-4.0.0-white.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-4.1.0-white.svg)](CHANGELOG.md)
 [![After Effects](https://img.shields.io/badge/After%20Effects-2022%2B-9999ff.svg)](#compatibility)
 [![CEP](https://img.shields.io/badge/CEP-11-555.svg)](#compatibility)
 [![Stack](https://img.shields.io/badge/React%2019%20·%20TypeScript%20·%20Vite-1e1e1e.svg)](#tech-stack)
@@ -20,29 +20,42 @@
 Layers Pane Plus is an advanced extension for Adobe After Effects that provides extended functionality for layer creation and management. Previously distributed as a single script, Layers Pane Plus has evolved into a comprehensive CEP extension that offers a more robust, modern, and integrated After Effects experience.
 
 ## Current Version
-**v4.0.0** - Major rewrite: migrated to a modern, modular architecture (React + TypeScript, bundled with Vite). Redesigned UI, a new Markers mover, and a far more maintainable codebase. See [CHANGELOG.md](CHANGELOG.md).
+**v4.1.0** - Signed `.zxp` install, the panel now works on After Effects 2022 for macOS, and Duplicate is much faster. See [CHANGELOG.md](CHANGELOG.md).
 
-## What's New in v4.0.0
-- **Rebuilt from the ground up** on a modular React + TypeScript codebase (bundled with Vite), replacing the previous single-file script — easier to maintain and extend.
-- **Refreshed monochrome UI** built with accessible components (keyboard navigation, tooltips), keeping the familiar tabbed layout and custom icons.
-- **New Markers tool:** detect existing markers in the active composition and reposition them — individually or as a group — working in frames, with a timecode display based on the composition's frame rate.
-- **Responsive grid** (1–2 columns) and a cleaner unified Settings/Help modal.
-- **Updated compatibility:** now targets After Effects 2022 (22.0) and newer.
+## What's New in v4.1.0
+- Every release includes a signed `.zxp` that the free ZXP/UXP Installer installs without debug mode or registry keys.
+- On After Effects 2022 for macOS the panel no longer opens empty, and its buttons, tabs and dialogs respond to clicks.
+- Duplicate makes 20 copies of 2 layers in a 300-layer composition in under 2 seconds, down from about 20.
+- The release zip leaves out the remote debugging file and includes `Add Keys.reg` for Windows.
 
 ## Installation
 
-### For users (prebuilt extension)
+### For users: quick install (recommended)
+Each [release](https://github.com/dony-aep/layers-pane-plus/releases/latest) includes a signed `.zxp`. It needs no debug mode and no registry keys.
+
+1. Download and install the free [ZXP/UXP Installer by aescripts + aeplugins](https://aescripts.com/learn/zxp-installer/) (Windows and macOS).
+2. Download `layers-pane-plus-vX.Y.Z.zxp` from the latest release.
+3. Close After Effects, then open the `.zxp` in the installer: drag it onto the window, or use **File > Open**.
+4. Open After Effects and go to **Window > Extensions > Layers Pane Plus**.
+
+> If the installer says no compatible application was found and marks After Effects as "Action required", Adobe's own installer needs the Creative Cloud desktop app running and signed in. You can still install without it: click **Install Anyway**. If that fails, open the installer's settings (gear icon), turn on **Install for current user only**, and install again.
+
+> If you installed an earlier version by copying the `com.donyaep.LayersPanePlus` folder into `C:\Program Files (x86)\Common Files\Adobe\CEP\extensions` (or `/Library/Application Support/Adobe/CEP/extensions` on macOS), delete that copy first. The installer puts the new version in your user folder, and two copies of the same extension can mix their files.
+
+### For users: manual install (zip)
 1. Locate the Adobe After Effects CEP Extensions folder:
-   ```
-   C:\Program Files (x86)\Common Files\Adobe\CEP\extensions
-   ```
-   (or, per user: `%APPDATA%\Adobe\CEP\extensions`)
-2. Place the entire built extension folder (`com.donyaep.LayersPanePlus`) in this directory.
+   - **Windows:** `C:\Program Files (x86)\Common Files\Adobe\CEP\extensions` (or, per user: `%APPDATA%\Adobe\CEP\extensions`)
+   - **macOS:** `/Library/Application Support/Adobe/CEP/extensions` (or, per user: `~/Library/Application Support/Adobe/CEP/extensions`)
+2. Extract the release zip and copy the `com.donyaep.LayersPanePlus` folder it contains into this directory.
 3. Launch After Effects and open the extension via **Window > Extensions > Layers Pane Plus**.
 
-> Unsigned development builds require enabling CEP debug mode once:
+> Unsigned builds require enabling CEP debug mode once. On Windows, double-click `Add Keys.reg`, included in the release zip, or run:
 > ```
 > reg add "HKCU\Software\Adobe\CSXS.11" /v PlayerDebugMode /t REG_SZ /d 1 /f
+> ```
+> On macOS, in Terminal:
+> ```
+> defaults write com.adobe.CSXS.11 PlayerDebugMode 1 && killall cfprefsd
 > ```
 
 ### For developers (build from source)
@@ -51,9 +64,11 @@ Requires **Node.js 20.19+ or 22.12+** (Vite 8 requirement).
 ```bash
 npm install        # install dependencies
 npm run dev        # start the Vite dev server (browser preview)
+npm test           # unit tests (vitest)
 npm run build      # type-check + production build to dist/
 npm run deploy     # build + copy to %APPDATA%\Adobe\CEP\extensions (local install)
 npm run package    # build + zip dist/ into releases/ for distribution
+npm run sign       # build + signed .zxp in releases/ (needs ZXPSignCmd and a certificate)
 ```
 
 After `npm run deploy`, restart After Effects to load the updated panel.
@@ -71,7 +86,7 @@ After `npm run deploy`, restart After Effects to load the updated panel.
 | After Effects | 2022 (22.0) |
 | CEP runtime | 11 (Chromium 88) |
 
-> The floor was raised to After Effects 22.0 because `duplicateLayer` relies on `Layer.id`, introduced in After Effects 22.0.
+> The floor is After Effects 22.0 because the Markers tool relies on `Layer.id`, introduced in After Effects 22.0.
 
 ## Main Features
 - Quick creation of various layer types: Text, Solid, Null Object, Shape, Camera, Light, Adjustment

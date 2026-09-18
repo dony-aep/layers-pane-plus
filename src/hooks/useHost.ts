@@ -46,7 +46,7 @@ export function useHost() {
       openLayerSettings: () => call('openLayerSettings'),
 
       // Misc / settings
-      getSetting: (key: string, fallback = '') => call('getSetting', key, fallback),
+      getSettings: (keys: string[]) => call('getSettings', keys),
       saveSetting: (key: string, value: string | boolean | number) =>
         call('saveSetting', key, value),
     }

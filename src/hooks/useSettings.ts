@@ -1,9 +1,10 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useHost } from './useHost'
+import { mergeSettings } from '../lib/settings'
 
 /**
- * Loads a set of AE settings (key -> default) on mount and persists changes
- * immediately to the ExtendScript host. Values are kept as strings.
+ * Loads a set of AE settings (key -> default) on mount, in a single host call, and persists
+ * changes immediately to the ExtendScript host. Values are kept as strings.
  */
 export function useSettings<T extends Record<string, string>>(defaults: T) {
   const host = useHost()
@@ -12,14 +13,9 @@ export function useSettings<T extends Record<string, string>>(defaults: T) {
 
   useEffect(() => {
     let cancelled = false
-    const keys = Object.keys(defaults) as (keyof T)[]
-    Promise.all(keys.map((k) => host.getSetting(k as string, defaults[k]))).then((results) => {
+    host.getSettings(Object.keys(defaults)).then((reply) => {
       if (cancelled) return
-      const loaded = { ...defaults }
-      keys.forEach((k, i) => {
-        loaded[k] = (results[i] || defaults[k]) as T[keyof T]
-      })
-      setValues(loaded)
+      setValues(mergeSettings(defaults, reply))
       setReady(true)
     })
     return () => {

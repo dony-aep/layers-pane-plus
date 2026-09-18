@@ -1,5 +1,5 @@
 /*
-   Layers Pane Plus v4.0.0 - ExtendScript host logic
+   Layers Pane Plus - ExtendScript host logic
 
    Loaded into the After Effects scripting engine via the CEP manifest
    <ScriptPath>./jsx/scripts.jsx</ScriptPath>. Its functions live in the global
@@ -99,11 +99,8 @@ function createSolidLayer() {
         for (var i = selectedLayers.length - 1; i >= 0; i--) {
             var selectedLayer = selectedLayers[i];
 
-            // Clear selection and select only current layer to ensure proper dialog behavior
-            for (var j = 1; j <= comp.layers.length; j++) {
-                comp.layers[j].selected = false;
-            }
-            selectedLayer.selected = true;
+            // Select only the current layer to ensure proper dialog behavior
+            lpSelectOnly(comp, selectedLayer);
 
             app.executeCommand(2038); // Native command for "New Solid Layer"
 
@@ -147,11 +144,7 @@ function createLight() {
         for (var i = selectedLayers.length - 1; i >= 0; i--) {
             var selectedLayer = selectedLayers[i];
 
-            // Clear selection and select only current layer
-            for (var j = 1; j <= comp.layers.length; j++) {
-                comp.layers[j].selected = false;
-            }
-            selectedLayer.selected = true;
+            lpSelectOnly(comp, selectedLayer);
 
             app.executeCommand(2563); // Native command for "New Light"
 
@@ -195,11 +188,7 @@ function createCamera() {
         for (var i = selectedLayers.length - 1; i >= 0; i--) {
             var selectedLayer = selectedLayers[i];
 
-            // Clear selection and select only current layer
-            for (var j = 1; j <= comp.layers.length; j++) {
-                comp.layers[j].selected = false;
-            }
-            selectedLayer.selected = true;
+            lpSelectOnly(comp, selectedLayer);
 
             app.executeCommand(2564); // Native command for "New Camera"
 
@@ -534,9 +523,6 @@ function splitLayersAtCurrentTime() {
                 layersToSplit.push(layer);
             }
         }
-        for (var i = 1; i <= layers.length; i++) {
-            layers[i].selected = false;
-        }
         for (var i = 0; i < layersToSplit.length; i++) {
             var layer = layersToSplit[i];
             if (deleteSplitPart) {
@@ -584,87 +570,48 @@ function duplicateLayer(includeEffects, includeExpressions, numberOfCopies) {
     }
     
     app.beginUndoGroup("Duplicate Layer(s)");
-    
-    // Store information about original layers
-    var layerInfo = [];
+
+    // Duplicate the originals from top to bottom of the timeline
+    var originals = [];
     for (var i = 0; i < selectedLayers.length; i++) {
-        layerInfo.push({
-            layer: selectedLayers[i],
-            index: selectedLayers[i].index
-        });
+        originals.push(selectedLayers[i]);
     }
-    
-    // Sort by index (highest first) to maintain order when duplicating
-    layerInfo.sort(function(a, b) {
+    originals.sort(function(a, b) {
         return a.index - b.index;
     });
-    
-    var allNewLayers = [];
-    
-    // For each original layer, create the specified number of copies
-    for (var i = 0; i < layerInfo.length; i++) {
-        var originalLayer = layerInfo[i].layer;
-        
-        // Deselect all layers first
-        for (var j = 1; j <= comp.layers.length; j++) {
-            comp.layers[j].selected = false;
-        }
-        
-        // Select only the current original layer
-        originalLayer.selected = true;
-        
-        // Create multiple copies
+
+    var newLayers = [];
+    for (var i = 0; i < originals.length; i++) {
         for (var copyNum = 0; copyNum < numberOfCopies; copyNum++) {
-            // Store IDs of existing layers before duplicating
-            var existingLayerIds = {};
-            for (var k = 1; k <= comp.layers.length; k++) {
-                existingLayerIds[comp.layer(k).id] = true;
+            // Like Edit > Duplicate, Layer.duplicate() puts the copy right above the original,
+            // and it returns the copy.
+            var duplicatedLayer = originals[i].duplicate();
+
+            // If user doesn't want effects, remove them
+            if (!includeEffects && duplicatedLayer.property("Effects")) {
+                var effects = duplicatedLayer.property("Effects");
+                // Remove from last to first; skip any effect that can't be removed (e.g. locked)
+                // without abandoning the remaining ones (#10).
+                for (var e = effects.numProperties; e >= 1; e--) {
+                    try { effects.property(e).remove(); } catch (err) { /* skip locked effect */ }
+                }
             }
 
-            // Use native duplicate command
-            app.executeCommand(2080); // Native command for "Duplicate"
+            // If user doesn't want expressions, remove them
+            if (!includeExpressions) {
+                removeAllExpressions(duplicatedLayer);
+            }
 
-            // The duplicated layer is the one whose id wasn't present before.
-            var duplicatedLayer = null;
-            for (var k = 1; k <= comp.layers.length; k++) {
-                if (!existingLayerIds[comp.layer(k).id]) {
-                    duplicatedLayer = comp.layer(k);
-                    break;
-                }
-            }
-            
-            if (duplicatedLayer) {
-                // If user doesn't want effects, remove them
-                if (!includeEffects && duplicatedLayer.property("Effects")) {
-                    var effects = duplicatedLayer.property("Effects");
-                    // Remove from last to first; skip any effect that can't be removed (e.g. locked)
-                    // without abandoning the remaining ones (#10).
-                    for (var e = effects.numProperties; e >= 1; e--) {
-                        try { effects.property(e).remove(); } catch (err) { /* skip locked effect */ }
-                    }
-                }
-                
-                // If user doesn't want expressions, remove them
-                if (!includeExpressions) {
-                    removeAllExpressions(duplicatedLayer);
-                }
-                
-                // Store the layer ID (unique identifier)
-                allNewLayers.push({
-                    id: duplicatedLayer.id,
-                    name: duplicatedLayer.name
-                });
-            }
+            newLayers.push(duplicatedLayer);
         }
     }
-    
-    // Re-select only the newly created layers in a single pass.
-    var newIds = {};
-    for (var i = 0; i < allNewLayers.length; i++) {
-        newIds[allNewLayers[i].id] = true;
+
+    // Leave only the copies selected, as Edit > Duplicate does.
+    for (var i = 0; i < originals.length; i++) {
+        originals[i].selected = false;
     }
-    for (var j = 1; j <= comp.layers.length; j++) {
-        comp.layer(j).selected = newIds[comp.layer(j).id] === true;
+    for (var i = 0; i < newLayers.length; i++) {
+        newLayers[i].selected = true;
     }
 
     app.endUndoGroup();
@@ -896,9 +843,36 @@ function getSetting(key, fallback) {
         : fallback;
 }
 
+// Reads several settings in one evalScript call, since each call blocks After Effects' main
+// thread. Keys with no stored value are left out, and the panel falls back to its defaults.
+function getSettings(keys) {
+    var out = [];
+    for (var i = 0; i < keys.length; i++) {
+        if (app.settings.haveSetting("LayersPanePlus", keys[i])) {
+            out.push(lpJsonString(keys[i]) + ":" + lpJsonString(app.settings.getSetting("LayersPanePlus", keys[i])));
+        }
+    }
+    return "{" + out.join(",") + "}";
+}
+
 function saveSetting(key, value) {
     app.settings.saveSetting("LayersPanePlus", key, String(value));
     return "true";
+}
+
+// Quoted JSON string literal; this engine has no JSON object. Line breaks and tabs become spaces.
+function lpJsonString(s) {
+    return '"' + ("" + s).replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/[\r\n\t]/g, " ") + '"';
+}
+
+// Leaves only `layer` selected. Only the layers in comp.selectedLayers can be selected, so
+// there is no need to write to every layer in the comp.
+function lpSelectOnly(comp, layer) {
+    var sel = comp.selectedLayers;
+    for (var i = 0; i < sel.length; i++) {
+        sel[i].selected = false;
+    }
+    layer.selected = true;
 }
 
 // Clamps a time (seconds) into the valid composition range [0, duration] (#3).
@@ -929,8 +903,7 @@ function getMarkers(target) {
     if (!mp) return '{' + base + ',"markers":[]}';
     var meta = "";
     if (t.layer) {
-        var nm = ("" + t.layer.name).replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/[\r\n\t]/g, " ");
-        meta = ',"layerId":' + t.layer.id + ',"layerName":"' + nm + '"';
+        meta = ',"layerId":' + t.layer.id + ',"layerName":' + lpJsonString(t.layer.name);
     }
     var out = [];
     for (var i = 1; i <= mp.numKeys; i++) {
@@ -938,8 +911,7 @@ function getMarkers(target) {
         var cErr = false;
         // A failed read is flagged (commentError) instead of being hidden as an empty comment (#10).
         try { c = mp.keyValue(i).comment || ""; } catch (e) { cErr = true; }
-        c = c.replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/[\r\n\t]/g, " ");
-        out.push('{"index":' + i + ',"time":' + mp.keyTime(i) + ',"comment":"' + c + '"' + (cErr ? ',"commentError":true' : '') + '}');
+        out.push('{"index":' + i + ',"time":' + mp.keyTime(i) + ',"comment":' + lpJsonString(c) + (cErr ? ',"commentError":true' : '') + '}');
     }
     return '{' + base + meta + ',"markers":[' + out.join(",") + ']}';
 }

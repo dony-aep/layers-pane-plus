@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   Button, Dialog, DialogTrigger, Modal, ModalOverlay, Heading,
   Tabs, TabList, Tab, TabPanel,
@@ -17,6 +17,7 @@ function Content({ close }: { close: () => void }) {
   const [autoParent, setAutoParent] = useState(false)
   const [matchDuration, setMatchDuration] = useState(false)
   const [copied, setCopied] = useState(false)
+  const linkRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     if (!ready) return
@@ -30,8 +31,21 @@ function Content({ close }: { close: () => void }) {
     close()
   }
 
-  const copy = () => {
-    navigator.clipboard?.writeText(LINK)
+  const copy = async () => {
+    let ok = false
+    try {
+      await navigator.clipboard.writeText(LINK)
+      ok = true
+    } catch {
+      // CEP rejects the async clipboard API with NotAllowedError, even on a click (seen on
+      // After Effects 2026), so copy from the read-only field instead.
+      const input = linkRef.current
+      if (input) {
+        input.select()
+        ok = document.execCommand('copy')
+      }
+    }
+    if (!ok) return
     setCopied(true)
     setTimeout(() => setCopied(false), 1500)
   }
@@ -77,7 +91,7 @@ function Content({ close }: { close: () => void }) {
         </p>
         <p className={styles.helpText}>For support and updates, visit:</p>
         <div className={styles.linkRow}>
-          <input className={controls.input} value={LINK} readOnly aria-label="Website" />
+          <input ref={linkRef} className={controls.input} value={LINK} readOnly aria-label="Website" />
           <Button className={styles.miniBtn} onPress={copy}>{copied ? 'Copied' : 'Copy'}</Button>
           <Button className={styles.miniBtn} onPress={() => openURL(`https://${LINK}`)}>Open</Button>
         </div>

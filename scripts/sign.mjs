@@ -1,0 +1,151 @@
+/**
+ * Sign script – builds and packages dist/ as a signed ZXP with Adobe's ZXPSignCmd.
+ * Output: releases/layers-pane-plus-v{version}.zxp
+ * Usage: npm run sign              sign with the certificate in LPP_CERT_P12
+ *        npm run sign -- --cert    create a self-signed certificate and exit
+ *        npm run sign -- --verify  only verify the existing zxp
+ *        npm run sign -- --no-build  skip the build (sign whatever dist/ holds)
+ *
+ * Environment: LPP_CERT_P12 (path, default tools/certificate.p12), LPP_CERT_PASSWORD or
+ * LPP_CERT_PASSWORD_FILE (a file holding just the password, which keeps it out of the shell
+ * history), LPP_ZXPSIGNCMD (path to the tool, default tools/ZXPSignCmd.exe or
+ * tools/ZXPSignCmd), LPP_TSA (timestamp server, default http://timestamp.digicert.com).
+ * Certificate fields for --cert: LPP_CERT_COUNTRY, LPP_CERT_STATE, LPP_CERT_ORG, LPP_CERT_NAME.
+ */
+import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, statSync } from 'fs'
+import { join, resolve } from 'path'
+import { fileURLToPath } from 'url'
+import { execFileSync, execSync } from 'child_process'
+
+const EXTENSION_ID = 'com.donyaep.LayersPanePlus'
+const __dirname = fileURLToPath(new URL('.', import.meta.url))
+const projectRoot = join(__dirname, '..')
+const toolsDir = join(projectRoot, 'tools')
+const releasesDir = join(projectRoot, 'releases')
+
+const args = process.argv.slice(2)
+const has = (flag) => args.includes(flag)
+const pkg = JSON.parse(readFileSync(join(projectRoot, 'package.json'), 'utf-8'))
+const zxpPath = resolve(releasesDir, `layers-pane-plus-v${pkg.version}.zxp`)
+
+const toolName = process.platform === 'win32' ? 'ZXPSignCmd.exe' : 'ZXPSignCmd'
+const tool = resolve(process.env.LPP_ZXPSIGNCMD ?? join(toolsDir, toolName))
+const certPath = resolve(process.env.LPP_CERT_P12 ?? join(toolsDir, 'certificate.p12'))
+const tsa = process.env.LPP_TSA ?? 'http://timestamp.digicert.com'
+
+function readPassword() {
+  if (process.env.LPP_CERT_PASSWORD) return process.env.LPP_CERT_PASSWORD
+  const file = process.env.LPP_CERT_PASSWORD_FILE
+  if (!file) return undefined
+  if (!existsSync(file)) {
+    console.error(`ERROR: LPP_CERT_PASSWORD_FILE points to ${file}, which does not exist.`)
+    process.exit(1)
+  }
+  const value = readFileSync(file, 'utf-8').trim()
+  if (value === '') {
+    console.error(`ERROR: ${file} is empty.`)
+    process.exit(1)
+  }
+  return value
+}
+const password = readPassword()
+
+if (!existsSync(tool)) {
+  console.error(`ERROR: ZXPSignCmd not found at ${tool}`)
+  console.error('Download it (4.1.3) from https://github.com/Adobe-CEP/CEP-Resources/tree/master/ZXPSignCMD')
+  console.error(`and put it in ${toolsDir} (git-ignored), or set LPP_ZXPSIGNCMD.`)
+  process.exit(1)
+}
+
+// ZXPSignCmd prints the password in its own error messages, so its output is never shown
+// unfiltered.
+const hidePassword = (text) => (password ? text.split(password).join('***') : text)
+
+function runTool(toolArgs) {
+  try {
+    return execFileSync(tool, toolArgs, { encoding: 'utf-8' })
+  } catch (error) {
+    const output = hidePassword(`${error.stdout ?? ''}${error.stderr ?? ''}`.trim())
+    console.error(output || hidePassword(String(error.message)))
+    process.exit(1)
+  }
+}
+
+if (has('--cert')) {
+  if (!password) {
+    console.error('ERROR: set LPP_CERT_PASSWORD_FILE (or LPP_CERT_PASSWORD) before creating a certificate.')
+    process.exit(1)
+  }
+  if (existsSync(certPath)) {
+    console.error(`ERROR: ${certPath} already exists. Delete it first if you want a new one.`)
+    process.exit(1)
+  }
+  mkdirSync(toolsDir, { recursive: true })
+  const country = process.env.LPP_CERT_COUNTRY ?? 'CO'
+  const state = process.env.LPP_CERT_STATE ?? 'Bogota'
+  // dony-aep rather than "dony.": a trailing dot causes trouble in certificate fields.
+  const org = process.env.LPP_CERT_ORG ?? 'dony-aep'
+  const name = process.env.LPP_CERT_NAME ?? 'dony-aep'
+  // 10 years: once the certificate expires, installs signed without a timestamp stop loading.
+  runTool(['-selfSignedCert', country, state, org, name, password, certPath, '-validityDays', '3650'])
+  console.log(`Self-signed certificate created: ${certPath}`)
+  console.log('Keep it and its password out of the repository; tools/ and *.p12 are git-ignored.')
+  process.exit(0)
+}
+
+if (has('--verify')) {
+  if (!existsSync(zxpPath)) {
+    console.error(`ERROR: ${zxpPath} not found. Run npm run sign first.`)
+    process.exit(1)
+  }
+  console.log(runTool(['-verify', zxpPath, '-certInfo']))
+  process.exit(0)
+}
+
+if (!password) {
+  console.error('ERROR: set LPP_CERT_PASSWORD_FILE (or LPP_CERT_PASSWORD) with the certificate password.')
+  process.exit(1)
+}
+if (!existsSync(certPath)) {
+  console.error(`ERROR: certificate not found at ${certPath}. Create one with: npm run sign -- --cert`)
+  process.exit(1)
+}
+
+if (!has('--no-build')) {
+  console.log(`Building Layers Pane Plus v${pkg.version}...`)
+  try {
+    execSync('npm run build', { cwd: projectRoot, stdio: 'inherit' })
+  } catch {
+    console.error('Build failed. Aborting.')
+    process.exit(1)
+  }
+}
+
+const distDir = join(projectRoot, 'dist')
+if (!existsSync(distDir)) {
+  console.error('ERROR: dist/ not found after build.')
+  process.exit(1)
+}
+mkdirSync(releasesDir, { recursive: true })
+
+// Sign a copy without .debug, which would open the remote debugger on every install, and
+// without the macOS leftovers Adobe asks to strip before distribution.
+const stageDir = resolve(releasesDir, '.stage-zxp')
+rmSync(stageDir, { recursive: true, force: true })
+cpSync(distDir, stageDir, { recursive: true })
+rmSync(join(stageDir, '.debug'), { force: true })
+for (const junk of ['.DS_Store', '__MACOSX']) {
+  rmSync(join(stageDir, junk), { recursive: true, force: true })
+}
+
+if (existsSync(zxpPath)) rmSync(zxpPath)
+runTool(['-sign', stageDir, zxpPath, certPath, password, '-tsa', tsa])
+rmSync(stageDir, { recursive: true, force: true })
+
+if (!existsSync(zxpPath)) {
+  console.error('ERROR: Failed to create the ZXP.')
+  process.exit(1)
+}
+const sizeMB = (statSync(zxpPath).size / 1024 / 1024).toFixed(2)
+console.log(`Signed package created: releases/layers-pane-plus-v${pkg.version}.zxp (${sizeMB} MB) as ${EXTENSION_ID}`)
+console.log(runTool(['-verify', zxpPath, '-certInfo']))

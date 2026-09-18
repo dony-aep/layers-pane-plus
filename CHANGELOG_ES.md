@@ -5,6 +5,25 @@ Todos los cambios notables de la extensión Layers Pane Plus serán documentados
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 y este proyecto se adhiere al [Versionado Semántico](https://semver.org/spec/v2.0.0.html).
 
+## [4.1.0] - 2026-09-17
+
+### Añadido
+- Cada release incluye ahora un `layers-pane-plus-vX.Y.Z.zxp` firmado. El ZXP/UXP Installer gratuito de aescripts + aeplugins lo instala sin modo debug ni claves de registro.
+
+### Cambiado
+- Duplicar ya no recorre toda la composición para encontrar cada copia nueva. Hacer 20 copias de 2 capas en una composición de 300 capas pasó de unos 20 segundos a menos de 2 en After Effects 2026.
+- Solid, Light y Camera con Auto Parent o Match Layer Duration ya no escriben en todas las capas de la composición para reiniciar la selección.
+- El panel lee sus opciones guardadas con una sola petición a After Effects en lugar de una por opción.
+- El zip de la release incluye `Add Keys.reg`, que activa `PlayerDebugMode` en CSXS 5 a 22 en Windows con un doble clic.
+
+### Corregido
+- El panel abría vacío en After Effects 2022 para macOS, porque CEP 11 en macOS no ejecuta módulos ES cargados desde la carpeta de la extensión. Ahora se carga como script clásico.
+- En After Effects 2022 para macOS, ningún botón, pestaña, casilla ni diálogo reaccionaba a los clics, porque CEP no emite ahí eventos de puntero. El panel ahora los genera a partir de los clics del ratón, y no hace nada más donde CEP ya los emite, como en After Effects 2026 para Windows.
+- El botón Copy de la ayuda decía «Copied» sin copiar nada, porque After Effects bloquea la API del portapapeles. Ahora copia el enlace, y solo dice «Copied» cuando la copia funciona.
+
+### Seguridad
+- El zip de la release ya no incluye el archivo `.debug`, que abría un puerto de Chrome DevTools (8088) en cada instalación con el modo debug activado.
+
 ## [4.0.0] - 2026-06-01
 
 ### Cambiado

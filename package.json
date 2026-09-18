@@ -1,6 +1,6 @@
 {
   "name": "layers-pane-plus-extension",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "Layers Pane Plus - modular toolkit for Adobe After Effects",
   "private": true,
   "type": "module",
@@ -9,7 +9,9 @@
     "build": "tsc -b && vite build",
     "deploy": "tsc -b && vite build && node scripts/deploy.mjs",
     "package": "node scripts/package.mjs",
-    "preview": "vite preview"
+    "sign": "node scripts/sign.mjs",
+    "preview": "vite preview",
+    "test": "vitest run"
   },
   "dependencies": {
     "react": "^19.2.6",
@@ -21,6 +23,7 @@
     "@types/react-dom": "^19.2",
     "@vitejs/plugin-react": "^6.0.2",
     "typescript": "^6.0.3",
-    "vite": "^8.0.0"
+    "vite": "^8.0.0",
+    "vitest": "^4.1.11"
   }
 }

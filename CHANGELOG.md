@@ -5,6 +5,25 @@ All notable changes to Layers Pane Plus extension will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.1.0] - 2026-09-17
+
+### Added
+- Each release now includes a signed `layers-pane-plus-vX.Y.Z.zxp`. The free ZXP/UXP Installer by aescripts + aeplugins installs it without debug mode or registry keys.
+
+### Changed
+- Duplicate no longer searches the whole composition for each new copy. Making 20 copies of 2 layers in a 300-layer composition went from about 20 seconds to under 2 on After Effects 2026.
+- Solid, Light and Camera with Auto Parent or Match Layer Duration no longer write to every layer in the composition to reset the selection.
+- The panel reads its saved options with one request to After Effects instead of one per option.
+- The release zip includes `Add Keys.reg`, which turns on `PlayerDebugMode` for CSXS 5 to 22 on Windows with a double click.
+
+### Fixed
+- The panel opened empty on After Effects 2022 for macOS, because CEP 11 on macOS does not run ES modules loaded from the extension folder. The panel now loads as a classic script.
+- On After Effects 2022 for macOS, no button, tab, checkbox or dialog reacted to clicks, because CEP there sends no pointer events. The panel now creates them from mouse clicks, and does nothing extra where CEP already sends them, as on After Effects 2026 for Windows.
+- The Copy button in Help said "Copied" without copying anything, because After Effects blocks the clipboard API. It now copies the link, and says "Copied" only when the copy worked.
+
+### Security
+- The release zip no longer includes the `.debug` file, which opened a Chrome DevTools port (8088) on every install with debug mode on.
+
 ## [4.0.0] - 2026-06-01
 
 ### Changed

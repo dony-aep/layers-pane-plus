@@ -6,8 +6,8 @@
     </ExtensionList>
     <ExecutionEnvironment>
         <HostList>
-            <!-- After Effects 2022 (22.0) and above – CEP 11 / Chromium 88. Floor raised to 22.0
-                 because duplicateLayer relies on Layer.id, introduced in After Effects 22.0. -->
+            <!-- After Effects 2022 (22.0) and above – CEP 11 / Chromium 88. Floor at 22.0
+                 because the markers tool relies on Layer.id, introduced in After Effects 22.0. -->
             <Host Name="AEFT" Version="22.0"/>
         </HostList>
         <LocaleList>
