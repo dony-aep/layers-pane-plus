@@ -5,6 +5,11 @@ All notable changes to Layers Pane Plus extension will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+- Text and icons display correctly when the panel is installed for all users, in `C:\Program Files (x86)\Common Files\Adobe\CEP\extensions`, which is where the aescripts ZXP Installer puts it. The bundle built its font URLs when the panel opened, and the parentheses in that path made the browser drop them: the text fell back to a serif font and each icon showed its name instead, such as `layers`. The styles now ship in their own `style.css` with relative URLs.
+
 ## [4.1.0] - 2026-09-17
 
 ### Added

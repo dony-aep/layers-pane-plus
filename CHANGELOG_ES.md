@@ -5,6 +5,11 @@ Todos los cambios notables de la extensión Layers Pane Plus serán documentados
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 y este proyecto se adhiere al [Versionado Semántico](https://semver.org/spec/v2.0.0.html).
 
+## [Sin publicar]
+
+### Corregido
+- El texto y los iconos se ven bien también con el panel instalado para todos los usuarios, en `C:\Program Files (x86)\Common Files\Adobe\CEP\extensions`, donde lo pone el ZXP Installer de aescripts. El código armaba la URL de cada fuente al abrir el panel, y los paréntesis de esa ruta la invalidaban: el texto salía en serif y cada icono mostraba su nombre, como `layers`. Ahora los estilos van en su propio `style.css`, con URL relativas.
+
 ## [4.1.0] - 2026-09-17
 
 ### Añadido
