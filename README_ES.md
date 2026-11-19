@@ -2,7 +2,7 @@
 
 [![English](https://img.shields.io/badge/Language-English-blue.svg)](README.md)
 [![Español](https://img.shields.io/badge/Idioma-Español-red.svg)](README_ES.md)
-[![Versión](https://img.shields.io/badge/versión-4.1.0-white.svg)](CHANGELOG_ES.md)
+[![Versión](https://img.shields.io/badge/versión-4.1.1-white.svg)](CHANGELOG_ES.md)
 [![After Effects](https://img.shields.io/badge/After%20Effects-2022%2B-9999ff.svg)](#compatibilidad)
 [![CEP](https://img.shields.io/badge/CEP-11-555.svg)](#compatibilidad)
 [![Stack](https://img.shields.io/badge/React%2019%20·%20TypeScript%20·%20Vite-1e1e1e.svg)](#stack-tecnológico)
@@ -20,13 +20,10 @@
 Layers Pane Plus es una extensión avanzada para Adobe After Effects que proporciona funcionalidad extendida para la creación y gestión de capas. Previamente distribuido como un script único, Layers Pane Plus ha evolucionado a una extensión CEP, ofreciendo una experiencia más robusta, moderna e integrada en After Effects.
 
 ## Versión Actual
-**v4.1.0** - Instalación con `.zxp` firmado, el panel ya funciona en After Effects 2022 para macOS y Duplicar es mucho más rápido. Ver [CHANGELOG_ES.md](CHANGELOG_ES.md).
+**v4.1.1** - El texto y los iconos se ven bien con el panel instalado para todos los usuarios. Ver [CHANGELOG_ES.md](CHANGELOG_ES.md).
 
-## Novedades en v4.1.0
-- Cada release incluye un `.zxp` firmado que el ZXP/UXP Installer gratuito instala sin modo debug ni claves de registro.
-- En After Effects 2022 para macOS el panel ya no abre vacío, y sus botones, pestañas y diálogos responden a los clics.
-- Duplicar hace 20 copias de 2 capas en una composición de 300 capas en menos de 2 segundos, antes unos 20.
-- El zip de la release deja fuera el archivo de depuración remota e incluye `Add Keys.reg` para Windows.
+## Novedades en v4.1.1
+- Instalado para todos los usuarios, en `C:\Program Files (x86)\Common Files\Adobe\CEP\extensions`, el panel mostraba cada icono con su nombre, como `layers`, y el texto en la fuente del sistema. Ahora carga sus fuentes también desde esa carpeta.
 
 ## Instalación
 

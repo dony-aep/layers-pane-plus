@@ -2,7 +2,7 @@
 
 [![English](https://img.shields.io/badge/Language-English-blue.svg)](README.md)
 [![Español](https://img.shields.io/badge/Idioma-Español-red.svg)](README_ES.md)
-[![Version](https://img.shields.io/badge/version-4.1.0-white.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-4.1.1-white.svg)](CHANGELOG.md)
 [![After Effects](https://img.shields.io/badge/After%20Effects-2022%2B-9999ff.svg)](#compatibility)
 [![CEP](https://img.shields.io/badge/CEP-11-555.svg)](#compatibility)
 [![Stack](https://img.shields.io/badge/React%2019%20·%20TypeScript%20·%20Vite-1e1e1e.svg)](#tech-stack)
@@ -20,13 +20,10 @@
 Layers Pane Plus is an advanced extension for Adobe After Effects that provides extended functionality for layer creation and management. Previously distributed as a single script, Layers Pane Plus has evolved into a comprehensive CEP extension that offers a more robust, modern, and integrated After Effects experience.
 
 ## Current Version
-**v4.1.0** - Signed `.zxp` install, the panel now works on After Effects 2022 for macOS, and Duplicate is much faster. See [CHANGELOG.md](CHANGELOG.md).
+**v4.1.1** - Text and icons display correctly when the panel is installed for all users. See [CHANGELOG.md](CHANGELOG.md).
 
-## What's New in v4.1.0
-- Every release includes a signed `.zxp` that the free ZXP/UXP Installer installs without debug mode or registry keys.
-- On After Effects 2022 for macOS the panel no longer opens empty, and its buttons, tabs and dialogs respond to clicks.
-- Duplicate makes 20 copies of 2 layers in a 300-layer composition in under 2 seconds, down from about 20.
-- The release zip leaves out the remote debugging file and includes `Add Keys.reg` for Windows.
+## What's New in v4.1.1
+- Installed for all users, in `C:\Program Files (x86)\Common Files\Adobe\CEP\extensions`, the panel showed each icon as its name, such as `layers`, and the text in the system font. It now loads its fonts from that folder too.
 
 ## Installation
 
